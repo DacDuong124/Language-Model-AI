@@ -1,0 +1,349 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+body {
+  background-color: rgb(234, 234, 234);
+}
+
+.header {
+  background-color: #fffefe;
+  border-radius: 10px;
+  padding: 20px;
+  padding-bottom: 40px;
+
+  text-align: start;
+  font-size: 20px;
+  height: auto;
+  width: fit-content;
+
+}
+
+.topnav {
+  overflow: hidden;
+  background-color: #f1f1f1;
+  width: fit-content;
+
+}
+
+.topnav a {
+  float: left;
+  display: block;
+  color: black;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+  border-bottom: 3px solid transparent;
+}
+
+.topnav a:hover {
+  border-bottom: 3px solid rgb(19, 147, 197);
+}
+
+.topnav a.active {
+  border-bottom: 3px solid rgb(19, 147, 197);
+}
+
+.left {
+  width: 30%;
+  height: 300px; /* only for demonstration, should be removed */
+  background: #fffefe;
+  padding-left: 15px;
+  font-size: 15px;
+
+}
+
+
+.container{
+  display: flex;
+  height: fit-content;
+  font-size: 15px;
+
+
+}
+.leftSection{
+  width: auto; 
+  background:"white";
+
+}
+
+.rightSection{
+  padding-left: 60px;
+  /* flex-grow: 1; */ 
+  background:"white";
+
+}
+
+input[type=text] {
+  width: 106%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: none;
+  border-radius: 10px;
+  background-color: #efecec;
+  color: black;
+}
+.requiredStar{
+  color: red;
+}
+
+
+
+/* The checkbox_section */
+.checkbox_section {
+  display: block;
+  position: relative;
+  padding-left: 25px;
+  margin-bottom: 20px;
+  cursor: pointer;
+  font-size: 15px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.checkbox_section input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 15px;
+  width: 15px;
+  
+  border-radius: 5px;
+  background-color: #eee;
+}
+
+/* On mouse-over, add a grey background color */
+.checkbox_section:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a blue background */
+.checkbox_section input:checked ~ .checkmark {
+  background-color: #2196F3;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.checkbox_section input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.checkbox_section .checkmark:after {
+  left: 5px;
+  top: 0px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0 ;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+
+/* ////////////// */
+/*Collaspible SECTION*/
+
+.collapsible {
+  background-color: white;
+  color: black;
+  cursor: pointer;
+  padding: 0px;
+  width: auto;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+}
+
+.active2, .collapsible:hover {
+  background-color: #f4f2f2;
+}
+
+.collapsible:after {
+  content: '\262D';
+  color: black;
+  font-weight: bold;
+  float: right;
+  margin-left: 5px;
+}
+.active2:after {
+  content: "\2622";
+}
+
+.content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+  background-color: white;
+}
+
+/* TABLE STUFFS */
+.wrapper {
+  text-align: center;
+  border-bottom: 3px solid #000000;
+  background-color: #FFF;
+  
+}
+
+table{
+  max-width:100%;
+  white-space:nowrap;
+  margin: auto;
+  border-collapse: separate;
+  padding-top: 20px;
+  padding-bottom: 20px;
+
+  border-spacing: 0;
+}
+
+
+tr{
+  
+  border: 1px groove #565656;
+}
+td{
+  border: 1px groove #565656;
+  padding: 10px 30px;
+  background-color: #FFF;
+  color: #000000;
+}
+
+th{
+  border:  1px groove #565656;
+  padding: 10px 30px;
+  background-color: #FFF;
+  color: #000000;
+}
+
+.textLeft{
+  text-align: left;
+  padding-right: 100px;
+
+}
+.textRight{
+  text-align: right;
+  padding-left: 100px;
+
+
+}
+.textCenter{
+  text-align: center;
+
+
+
+}
+
+/*第一欄第一列：左上*/
+tr:first-child td:first-child{
+  border-top-left-radius: 10px;
+}
+/*第一欄最後列：左下*/
+tr:last-child td:first-child{
+  border-bottom-left-radius: 10px;
+}
+/*最後欄第一列：右上*/
+tr:first-child td:last-child{
+  border-top-right-radius: 10px;
+}
+/*最後欄第一列：右下*/
+tr:last-child td:last-child{
+  border-bottom-right-radius: 10px;
+}
+
+
+
+
+/*第一欄第一列：左上*/
+tr:first-child th:first-child{
+  border-top-left-radius: 10px;
+
+}
+/*第一欄最後列：左下*/
+tr:last-child th:first-child{
+  border-bottom-left-radius: 10px;
+
+}
+/*最後欄第一列：右上*/
+tr:first-child th:last-child{
+  border-top-right-radius: 10px;
+
+}
+/*最後欄第一列：右下*/
+tr:last-child th:last-child{
+  border-bottom-right-radius: 10px;
+
+}
+
+
+
+.image-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.image-button img {
+  height: 20px;
+  margin-right: auto;
+}
