@@ -1,4 +1,4 @@
-import logo from './logo192.png'
+// import logo from './logo192.png'
 import axios from "axios";
 
 function Header(props) {
@@ -20,7 +20,7 @@ function Header(props) {
 
     return(
         <header className="App-header">
-            <img src={logo} className="App-logo" alt="logo" />
+            {/* <img src={logo} className="App-logo" alt="logo" /> */}
             <button onClick={logMeOut}> 
                 Logout
             </button>

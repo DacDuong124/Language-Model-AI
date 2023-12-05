@@ -1,9 +1,9 @@
-// import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import React, { useState } from 'react';
-// import Box from '@mui/material/Box';
-// import TextField from '@mui/material/TextField';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
 
-function DashboardUser() {
+function UserHomePage() {
 
 
     return (
@@ -32,3 +32,5 @@ function DashboardUser() {
 
     )
 }
+
+export default UserHomePage;

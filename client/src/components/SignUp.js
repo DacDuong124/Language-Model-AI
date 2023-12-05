@@ -1,22 +1,25 @@
 import { useState } from 'react';
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 
 function SignUp(props) {
+  const navigate = useNavigate();
 
-    const [signUpForm, setSignUpForm] = useState({
-      email: "",
-      password: ""
+  const [signUpForm, setSignUpForm] = useState({
+    email: "",
+    password: ""
+  })
+
+
+  function signMeUp(event) {
+    axios({
+      method: "POST",
+      url: "/register",
+      data: {
+        email: signUpForm.email,
+        password: signUpForm.password
+      }
     })
-
-    function signMeUp(event) {
-      axios({
-        method: "POST",
-        url:"/register",
-        data:{
-          email: signUpForm.email,
-          password: signUpForm.password
-         }
-      })
       .then((response) => {
         props.setToken(response.data.access_token)
       }).catch((error) => {
@@ -24,43 +27,49 @@ function SignUp(props) {
           console.log(error.response)
           console.log(error.response.status)
           console.log(error.response.headers)
-          }
+        }
       })
 
-      setSignUpForm(({
-        email: "",
-        password: ""}))
+    setSignUpForm(({
+      email: "",
+      password: ""
+    }))
 
-      event.preventDefault()
-    }
+    event.preventDefault()
+  }
 
-    function handleChange(event) { 
-      const {value, name} = event.target
-      setSignUpForm(prevNote => ({
-          ...prevNote, [name]: value})
-      )}
+  function handleChange(event) {
+    const { value, name } = event.target
+    setSignUpForm(prevNote => ({
+      ...prevNote, [name]: value
+    })
+    )
+  }
 
-    return (
-      <div>
-        <h1>SignUp</h1>
-          <form className="signUp">
-            <input onChange={handleChange} 
-                  type="email"
-                  text={signUpForm.email} 
-                  name="email" 
-                  placeholder="Email" 
-                  value={signUpForm.email} />
-            <input onChange={handleChange} 
-                  type="password"
-                  text={signUpForm.password} 
-                  name="password" 
-                  placeholder="Password" 
-                  value={signUpForm.password} />
+  return (
+    <div>
+      <h1>SignUp</h1>
+      <form className="signUp">
+        <input onChange={handleChange}
+          type="email"
+          text={signUpForm.email}
+          name="email"
+          placeholder="Email"
+          value={signUpForm.email} />
+        <input onChange={handleChange}
+          type="password"
+          text={signUpForm.password}
+          name="password"
+          placeholder="Password"
+          value={signUpForm.password} />
 
-          <button onClick={signMeUp}>Submit</button>
-        </form>
-      </div>
-    );
+        <button onClick={signMeUp}>Create Account</button>
+        <button onClick={() => navigate("/login")}>Login</button>
+
+
+      </form>
+    </div>
+  );
 }
 
 export default SignUp;

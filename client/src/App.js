@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
+
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+
 import './App.css'
 
 //AUTH COMPONENTS
-import Login from './components/Login'
+import LoginSignUp from './components/LoginSignUp'
 
 import SignUp from './components/SignUp'
 import Profile from './components/Profile'
@@ -14,6 +14,7 @@ import useToken from './components/useToken'
 //USER
 import DashboardUser from './User/DashboardUser'
 import Document from './User/Document'
+
 
 function App() {
   // const { token, removeToken, setToken } = useToken();
@@ -32,15 +33,15 @@ function App() {
         {/* <Route path='/login' element={<Login />}></Route> */}
         <Route
           path="/login"
-          element={<Login onLogin={handleLogin} />}
+          element={<LoginSignUp onLogin={handleLogin} />}
         />
-        <Route path='/signup' element={<SignUp />}></Route>
+        {/* <Route path='/register' element={<SignUp />}></Route> */}
 
         {/* <Route path='/document' element={<Document />}></Route> */}
 
         <Route
           path="/document"
-          element={isLoggedIn ? <Document /> : <Login onLogin={handleLogin} />}
+          element={isLoggedIn ? <Document /> : <LoginSignUp onLogin={handleLogin} />}
         />
 
       </Routes>

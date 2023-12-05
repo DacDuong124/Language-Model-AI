@@ -21,7 +21,7 @@
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
+  color: rgb(80, 48, 48);
 }
 
 .App-link {
@@ -37,313 +37,406 @@
   }
 }
 
-body {
-  background-color: rgb(234, 234, 234);
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap');
+
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
 }
 
-.header {
-  background-color: #fffefe;
-  border-radius: 10px;
-  padding: 20px;
-  padding-bottom: 40px;
-
-  text-align: start;
-  font-size: 20px;
-  height: auto;
-  width: fit-content;
-
+body, input{
+    font-family: 'Poppins', sans-serif;
 }
-
-.topnav {
-  overflow: hidden;
-  background-color: #f1f1f1;
-  width: fit-content;
-
-}
-
-.topnav a {
-  float: left;
-  display: block;
-  color: black;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-  font-size: 17px;
-  border-bottom: 3px solid transparent;
-}
-
-.topnav a:hover {
-  border-bottom: 3px solid rgb(19, 147, 197);
-}
-
-.topnav a.active {
-  border-bottom: 3px solid rgb(19, 147, 197);
-}
-
-.left {
-  width: 30%;
-  height: 300px; /* only for demonstration, should be removed */
-  background: #fffefe;
-  padding-left: 15px;
-  font-size: 15px;
-
-}
-
 
 .container{
-  display: flex;
-  height: fit-content;
-  font-size: 15px;
-
-
-}
-.leftSection{
-  width: auto; 
-  background:"white";
-
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    background-color: #fff;
+    overflow: hidden;
 }
 
-.rightSection{
-  padding-left: 60px;
-  /* flex-grow: 1; */ 
-  background:"white";
-
+.container:before{
+    content: '';
+    position: absolute;
+    width: 2000px;
+    height: 2000px;
+    border-radius: 50%;
+    background: linear-gradient(-45deg, #4481eb, #04befe);
+    top: -10%;
+    right: 48%;
+    transform: translateY(-50%);
+    z-index: 6;
+    transition: 1.8s ease-in-out;
 }
 
-input[type=text] {
-  width: 106%;
-  padding: 12px 20px;
-  margin: 8px 0;
-  box-sizing: border-box;
-  border: none;
-  border-radius: 10px;
-  background-color: #efecec;
-  color: black;
-}
-.requiredStar{
-  color: red;
+.forms-container{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
 }
 
-
-
-/* The checkbox_section */
-.checkbox_section {
-  display: block;
-  position: relative;
-  padding-left: 25px;
-  margin-bottom: 20px;
-  cursor: pointer;
-  font-size: 15px;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+.signin-signup{
+    position: absolute;
+    top: 50%;
+    left: 75%;
+    transform: translate(-50%, -50%);
+    width: 50%;
+    display: grid;
+    grid-template-columns: 1fr;
+    z-index: 5;
+    transition: 1s 0.7s ease-in-out;
 }
 
-/* Hide the browser's default checkbox */
-.checkbox_section input {
-  position: absolute;
-  opacity: 0;
-  cursor: pointer;
-  height: 0;
-  width: 0;
+form{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 5rem;
+    overflow: hidden;
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+    transition: 0.2s 0.7s ease-in-out;
 }
 
-/* Create a custom checkbox */
-.checkmark {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 15px;
-  width: 15px;
-  
-  border-radius: 5px;
-  background-color: #eee;
+form.sign-in-form{
+    z-index: 2;
 }
 
-/* On mouse-over, add a grey background color */
-.checkbox_section:hover input ~ .checkmark {
-  background-color: #ccc;
+form.sign-up-form{
+    z-index: 1;
+    opacity: 0;
 }
 
-/* When the checkbox is checked, add a blue background */
-.checkbox_section input:checked ~ .checkmark {
-  background-color: #2196F3;
-}
-
-/* Create the checkmark/indicator (hidden when not checked) */
-.checkmark:after {
-  content: "";
-  position: absolute;
-  display: none;
-}
-
-/* Show the checkmark when checked */
-.checkbox_section input:checked ~ .checkmark:after {
-  display: block;
-}
-
-/* Style the checkmark/indicator */
-.checkbox_section .checkmark:after {
-  left: 5px;
-  top: 0px;
-  width: 5px;
-  height: 10px;
-  border: solid white;
-  border-width: 0 2px 2px 0 ;
-  -webkit-transform: rotate(45deg);
-  -ms-transform: rotate(45deg);
-  transform: rotate(45deg);
+.title{
+    font-size: 2.2rem;
+    color: #444;
+    margin-bottom: 10px;
 }
 
 
-/* ////////////// */
-/*Collaspible SECTION*/
+/* Removing input background color for Chrome autocomplete?
+https://stackoverflow.com/questions/2781549/removing-input-background-colour-for-chrome-autocomplete
+GOD BLESS stack overflow !!!!
+*/
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active{
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: none;
+    transition: background-color 5000s ease-in-out 0s;
+    box-shadow: none;
+}
+/* ///// */
 
-.collapsible {
-  background-color: white;
-  color: black;
-  cursor: pointer;
-  padding: 0px;
-  width: auto;
-  border: none;
-  text-align: left;
-  outline: none;
-  font-size: 15px;
+.input-field{
+    max-width: 380px;
+    width: 100%;
+    height: 55px;
+    background-color: #f0f0f0;
+    margin: 10px 0;
+    border-radius: 55px;
+    display: grid;
+    grid-template-columns: 15% 85%;
+    padding: 0 .4rem;
 }
 
-.active2, .collapsible:hover {
-  background-color: #f4f2f2;
+.input-field i{
+    text-align: center;
+    line-height: 55px;
+    color: #acacac;
+    font-size: 1.1rem;
 }
 
-.collapsible:after {
-  content: '\262D';
-  color: black;
-  font-weight: bold;
-  float: right;
-  margin-left: 5px;
-}
-.active2:after {
-  content: "\2622";
-}
-
-.content {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.2s ease-out;
-  background-color: white;
+.input-field input{
+    background: none;
+    outline: none;
+    border: none;
+    line-height: 1;
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: #1c1b1b;
 }
 
-/* TABLE STUFFS */
-.wrapper {
-  text-align: center;
-  border-bottom: 3px solid #000000;
-  background-color: #FFF;
-  
+.input-field input::placeholder{
+    color: green;
+    font-weight: 500;
 }
 
-table{
-  max-width:100%;
-  white-space:nowrap;
-  margin: auto;
-  border-collapse: separate;
-  padding-top: 20px;
-  padding-bottom: 20px;
+.btn{
+    width: 150px;
+    height: 49px;
+    border: none;
+    outline: none;
+    border-radius: 49px;
+    cursor: pointer;
+    background-color: #5995fd;
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin: 10px 0;
+    transition: .5s;
+}
 
-  border-spacing: 0;
+.btn:hover{
+    background-color: #4d84e2;
+}
+
+.social-text{
+    padding: .7rem 0;
+    font-size: 1rem;
+}
+
+.social-media{
+    display: flex;
+    justify-content: center;
+}
+
+.social-icon{
+    height: 46px;
+    width: 46px;
+    border: 1px solid #333;
+    margin: 0 0.45rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    color: #333;
+    font-size: 1.1rem;
+    border-radius: 50%;
+    transition: 0.3s;
+}
+
+.social-icon:hover{
+    color: #4481eb;
+    border-color: #4481eb;
+}
+
+.panels-container{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.panel{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: space-around;
+    text-align: center;
+    z-index: 7;
+}
+
+.left-panel{
+    pointer-events: all;
+    padding: 3rem 17% 2rem 12%;
+}
+
+.right-panel{
+    pointer-events: none;
+    padding: 3rem 12% 2rem 17%;
+}
+
+.panel .content{
+    color: #fff;
+    transition: .9s .6s ease-in-out;
+}
+
+.panel h3{
+    font-weight: 600;
+    line-height: 1;
+    font-size: 1.5rem;
+}
+
+.panel p{
+    font-size: 0.95rem;
+    padding: 0.7rem 0;
+}
+
+.btn.transparent{
+    margin: 0;
+    background: none;
+    border: 2px solid #fff;
+    width: 130px;
+    height: 41px;
+    font-weight: 600;
+    font-size: 0.8rem;
+}
+
+.image{
+    width: 100%;
+    transition: 1.1s .4s ease-in-out;
+}
+
+.right-panel .content, .right-panel .image{
+    transform: translateX(800px);
+}
+
+/* ANIMATION */
+
+.container.sign-up-mode:before{
+    transform: translate(100%, -50%);
+    right: 52%;
+}
+
+.container.sign-up-mode .left-panel .image,
+.container.sign-up-mode .left-panel .content{
+    transform: translateX(-800px);
+}
+
+.container.sign-up-mode .right-panel .content,
+.container.sign-up-mode .right-panel .image{
+    transform: translateX(0px);
+}
+
+.container.sign-up-mode .left-panel{
+    pointer-events: none;
+}
+
+.container.sign-up-mode .right-panel{
+    pointer-events: all;
+}
+
+.container.sign-up-mode .signin-signup{
+    left: 25%;
+}
+
+.container.sign-up-mode form.sign-in-form{
+    z-index: 1;
+    opacity: 0;
+}
+
+.container.sign-up-mode form.sign-up-form{
+    z-index: 2;
+    opacity: 1;
+}
+
+@media (max-width: 870px){
+    .container{
+        min-height: 800px;
+        height: 100vh;
+    }
+
+    .container:before{
+        width: 1500px;
+        height: 1500px;
+        left: 30%;
+        bottom: 68%;
+        transform: translateX(-50%);
+        right: initial;
+        top: initial;
+        transition: 2s ease-in-out;
+    }
+
+    .signin-signup{
+        width: 100%;
+        left: 50%;
+        top: 95%;
+        transform: translate(-50%, -100%);
+        transition: 1s 0.8s ease-in-out;
+    }
+
+    .panels-container{
+        z-index: 10;
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 2fr 1fr;
+    }
+
+    .panel{
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+        padding: 2.5rem 8%;
+    }
+
+    .panel .content{
+        padding-right: 15%;
+        transition: 0.9s 0.8s ease-in-out;
+}
+
+    .panel p{
+        font-size: 0.7rem;
+        padding: 0.5rem 0;
+    }
+
+    .btn.transparent{
+        width: 110px;
+        height: 35px;
+        font-size: 0.7rem;
+    }
+
+    .panel h3{
+        font-size: 1.2rem;
+    }
+
+    .image{
+        width: 100px;
+        transition: 0.9s 0.6s ease-in-out;
+    }
+
+    .left-panel{
+        grid-row: 1 / 2;
+    }
+
+    .right-panel{
+        grid-row: 3 / 4;
+    }
+
+    .right-panel .content, .right-panel .image{
+        transform: translateY(300px);
+    }
+
+    .container.sign-up-mode:before{
+        transform: translate(-50%, 100%);
+        bottom: 32%;
+        right: initial;
+    }
+
+    .container.sign-up-mode .left-panel .image,
+    .container.sign-up-mode .left-panel .content{
+        transform: translateY(-300px);
+    }
+
+    .container.sign-up-mode .signin-signup{
+        top: 5%;
+        transform: translate(-50%, 0);
+        left: 50%;
+    }
+
+}
+
+@media (max-width: 570px){
+    form{
+        padding: 0 1.5rem;
+    }
+
+    .image{
+        display: none;
+    }
+
+    .panel .content{
+        padding: 0.5rem 1rem;
+    }
+
+    .container:before{
+        bottom: 72%;
+        left: 50%;
+    }
+
+    .container.sign-up-mode:before{
+        bottom: 28%;
+        left: 50%;
+    }
 }
 
 
-tr{
-  
-  border: 1px groove #565656;
-}
-td{
-  border: 1px groove #565656;
-  padding: 10px 30px;
-  background-color: #FFF;
-  color: #000000;
-}
 
-th{
-  border:  1px groove #565656;
-  padding: 10px 30px;
-  background-color: #FFF;
-  color: #000000;
-}
-
-.textLeft{
-  text-align: left;
-  padding-right: 100px;
-
-}
-.textRight{
-  text-align: right;
-  padding-left: 100px;
-
-
-}
-.textCenter{
-  text-align: center;
-
-
-
-}
-
-/*第一欄第一列：左上*/
-tr:first-child td:first-child{
-  border-top-left-radius: 10px;
-}
-/*第一欄最後列：左下*/
-tr:last-child td:first-child{
-  border-bottom-left-radius: 10px;
-}
-/*最後欄第一列：右上*/
-tr:first-child td:last-child{
-  border-top-right-radius: 10px;
-}
-/*最後欄第一列：右下*/
-tr:last-child td:last-child{
-  border-bottom-right-radius: 10px;
-}
-
-
-
-
-/*第一欄第一列：左上*/
-tr:first-child th:first-child{
-  border-top-left-radius: 10px;
-
-}
-/*第一欄最後列：左下*/
-tr:last-child th:first-child{
-  border-bottom-left-radius: 10px;
-
-}
-/*最後欄第一列：右上*/
-tr:first-child th:last-child{
-  border-top-right-radius: 10px;
-
-}
-/*最後欄第一列：右下*/
-tr:last-child th:last-child{
-  border-bottom-right-radius: 10px;
-
-}
-
-
-
-.image-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #fff;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-.image-button img {
-  height: 20px;
-  margin-right: auto;
-}
