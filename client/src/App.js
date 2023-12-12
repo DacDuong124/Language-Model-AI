@@ -7,13 +7,15 @@ import './App.css'
 //AUTH COMPONENTS
 import LoginSignUp from './components/LoginSignUp'
 
-import SignUp from './components/SignUp'
-import Profile from './components/Profile'
-import Header from './components/Header'
-import useToken from './components/useToken'
+// import Header from './components/Header'
+// import useToken from './components/useToken'
 //USER
-import DashboardUser from './User/DashboardUser'
 import Document from './User/Document'
+import UserHomePage from './User/UserHomePage';
+import Sidebar from './User/Sidebar';
+import Trash from './User/Trash';
+import UserProfile from './User/UserProfile';
+import Subscription from './User/Subscription';
 
 
 function App() {
@@ -28,21 +30,34 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-      <Route path='/' element={<Navigate to = "/login" />}></Route>
-
+        <Route path='/' element={<Navigate to="/login" />}></Route>
         {/* <Route path='/login' element={<Login />}></Route> */}
+
         <Route
           path="/login"
           element={<LoginSignUp onLogin={handleLogin} />}
         />
-        {/* <Route path='/register' element={<SignUp />}></Route> */}
+        <Route
+          path='/userHomePage'
+          element={isLoggedIn ? <UserHomePage /> : <LoginSignUp onLogin={handleLogin} />}
+        />
 
         {/* <Route path='/document' element={<Document />}></Route> */}
 
-        <Route
-          path="/document"
-          element={isLoggedIn ? <Document /> : <LoginSignUp onLogin={handleLogin} />}
-        />
+        <Route path='/' element={<Sidebar />}>
+          {/* <Route path='/userHomePage' element={<UserHomePage />}></Route> */}
+
+          <Route path='/document' element={<Document />}></Route>
+
+
+          <Route path='/trash' element={<Trash />}></Route>
+          <Route path='/subscription' element={<Subscription />}></Route>
+          <Route path='/userprofile' element={<UserProfile />}></Route>
+
+        </Route>
+
+
+
 
       </Routes>
 

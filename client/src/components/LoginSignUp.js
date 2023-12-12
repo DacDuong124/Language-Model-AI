@@ -126,7 +126,7 @@ const LoginSignUp = ({ onLogin }) => {
       localStorage.setItem('access_token', access_token);
 
       // Use the navigate function to go to the /login path
-      navigate('/login');
+      // navigate('/login');
       setRegisterSuccess(true)
 
     } catch (error) {
@@ -160,7 +160,8 @@ const LoginSignUp = ({ onLogin }) => {
       // Trigger the onLogin callback to navigate to the home page
       onLogin();
       // Use the navigate function to go to the /document path
-      navigate('/document');
+      navigate('/userHomePage');
+
     } catch (error) {
       setLoginFailed(true)
 
@@ -204,7 +205,8 @@ const LoginSignUp = ({ onLogin }) => {
   }, [registerSuccess]);
 
 
-
+  // // https://codesandbox.io/p/sandbox/responsive-login-registration-w5lpz?file=%2Findex.html
+  // UI mostly borrow from this website
   return (
     <div>
       {/* <h2>Login</h2>
