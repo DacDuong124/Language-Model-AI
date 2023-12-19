@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 
@@ -19,33 +19,32 @@ import Subscription from './User/Subscription';
 
 
 function App() {
-  // const { token, removeToken, setToken } = useToken();
 
-  const [isLoggedIn, setLoggedIn] = useState(false);
+  // const [isLoggedIn, setLoggedIn] = useState(false);
 
-  const handleLogin = () => {
-    setLoggedIn(true);
-  };
+  // const handleLogin = () => {
+  //   setLoggedIn(true);
+  // };
 
   return (
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<Navigate to="/login" />}></Route>
-        {/* <Route path='/login' element={<Login />}></Route> */}
+        <Route path='/login' element={<LoginSignUp />}></Route>
 
-        <Route
+        {/* <Route
           path="/login"
           element={<LoginSignUp onLogin={handleLogin} />}
-        />
-        <Route
+        /> */}
+        {/* <Route
           path='/userHomePage'
           element={isLoggedIn ? <UserHomePage /> : <LoginSignUp onLogin={handleLogin} />}
-        />
+        /> */}
 
         {/* <Route path='/document' element={<Document />}></Route> */}
 
         <Route path='/' element={<Sidebar />}>
-          {/* <Route path='/userHomePage' element={<UserHomePage />}></Route> */}
+          <Route path='/userHomePage' element={<UserHomePage />}></Route>
 
           <Route path='/document' element={<Document />}></Route>
 
@@ -60,20 +59,6 @@ function App() {
 
 
       </Routes>
-
-      {/* <div className="App">
-        <Header token={removeToken}/>
-        {!token && token!=="" &&token!== undefined?  
-        <Login setToken={setToken} />
-        :(
-          <>
-            <Routes>
-              <Route exact path="/profile" element={<Profile token={token} setToken={setToken}/>}></Route>
-            </Routes>
-          </>
-        )}
-        <SignUp/>
-      </div> */}
     </BrowserRouter>
   );
 }

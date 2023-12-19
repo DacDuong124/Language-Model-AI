@@ -46,12 +46,12 @@
 
 .w3-sidebar {
   height: 100%;
-  width: 250px;
+  width: fit-content;
   background-color: #fff;
   position: fixed !important;
   z-index: 1;
   overflow: auto;
-  padding: 10px;
+  padding: 20px;
 }
 
 .w3-card,
@@ -114,7 +114,3 @@
   margin-bottom: 16px
 }
 
-.meincontent {
-  flex: 3;
-  padding-left: 280px;
-}

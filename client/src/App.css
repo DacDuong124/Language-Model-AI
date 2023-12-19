@@ -37,6 +37,8 @@
   }
 }
 
+/* LOGIN SIGNUP CSS SECTION */
+
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap');
 
 *{
@@ -438,5 +440,16 @@ input:-webkit-autofill:active{
     }
 }
 
+/* USER PROFILE */
+.userProfileTitle{
+    border-bottom: 2px solid #000; /* This adds a black line with 2 pixels of thickness */
+    margin-bottom: 10px;
+}
 
-
+.userProfileContainer{
+    padding: auto;
+    background-color: #cdeef7;
+    height: fit-content;
+    width: fit-content;
+    border-radius: 10px;
+}

@@ -1,35 +1,62 @@
 // Sidebar.js
-import React, { useEffect } from 'react';
-import { Link, Outlet } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
 import './sidebar.css'; // Import your styles
 // import axios from "axios";
 
-const Sidebar = (props) => {
+const Sidebar = () => {
+  const [userData, setUserData] = useState(null);
+  const navigate = useNavigate();
 
-  // function logMeOut() {
-  //   axios({
-  //     method: "POST",
-  //     url:"/logout",
-  //   })
-  //   .then((response) => {
-  //      props.token()
-  //   }).catch((error) => {
-  //     if (error.response) {
-  //       console.log(error.response)
-  //       console.log(error.response.status)
-  //       console.log(error.response.headers)
-  //       }
-  //   })}
+  useEffect(() => {
+    const jwtToken = localStorage.getItem('jwtToken'); // Replace with your token retrieval method
+    if (!jwtToken) {
+      navigate('/login'); // Redirect to login if no token is found
+      return;
+    }
+
+    fetch('http://localhost:3000/profile', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${jwtToken}`,
+      },
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Token expired or invalid');
+        }
+        return response.json();
+      })
+      .then(data => {
+        setUserData(data);
+      })
+      .catch(error => {
+        console.error('Error fetching user data:', error);
+        navigate('/login'); // Redirect to login on error
+      });
+  }, [navigate]); // Dependency array includes navigate
+
+  //The logout function
+  const handleLogout = () => {
+    // Clear the JWT token from local storage
+    localStorage.removeItem('jwtToken');
+
+    // Reset any application state related to the user (if applicable)
+
+    // Redirect to the login page or home page
+    // navigate('/login'); // or navigate to any other page you see fit
+  };
 
   const w3Open = () => {
-    document.getElementById("main").style.marginLeft = "25%";
-    document.getElementById("mySidebar").style.width = "25%";
+    document.getElementById("main").style.marginLeft = "22%";
+    document.getElementById("mySidebar").style.width = "20%";
     document.getElementById("mySidebar").style.display = "block";
     document.getElementById("openNav").style.display = 'none';
   }
 
   const w3Close = () => {
-    document.getElementById("main").style.marginLeft = "0%";
+    document.getElementById("main").style.marginLeft = "1%";
     document.getElementById("mySidebar").style.display = "none";
     document.getElementById("openNav").style.display = "inline-block";
   }
@@ -43,6 +70,16 @@ const Sidebar = (props) => {
 
       <div className="w3-sidebar w3-bar-block w3-card w3-animate-left" id="mySidebar" >
         <h2>Language Model AI</h2>
+        {userData ? (
+          <div>
+            <p>Email: {userData.email}</p>
+            {/* Display other user data as needed */}
+          </div>
+        ) : (
+          <p>Loading user data...</p>
+        )}
+
+
         <button className="w3-bar-item w3-button w3-large" onClick={w3Close}>Close &times;</button>
         <nav>
           <ul>
@@ -59,11 +96,12 @@ const Sidebar = (props) => {
               <Link to="/subscription">Premium Subscription</Link>
             </li>
 
-            <div style={{paddingTop:"300px"}}>
+            <div style={{ paddingTop: "300px" }}>
               <li>
-                <h3><Link to="/">Log Out</Link></h3>
-                {/* <button onClick={logMeOut}>            <h3 >Log Out</h3> </button> */}
-
+                {/* <h3><Link to="/">Log Out</Link></h3> */}
+                {/* <button onClick={handleLogout}><h3>Log Out</h3></button> */}
+                <Link to="/"><h3 onClick={handleLogout}>Log Out</h3></Link>
+              
               </li>
             </div>
 
