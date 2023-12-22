@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 
@@ -63,77 +65,68 @@ const LoginSignUp = () => {
   }
 
   // const handleLogin = async () => {
-  //   // // This snippet of code prevent the form from being unable to log in (and that weird question mark on the URL)
-  //   // var form = document.querySelector("form");;
-  //   // form.addEventListener("submit", function (event) {
-  //   //   event.preventDefault()
-  //   // });
-  //   ////// STACK OVERFLOW BABY (https://stackoverflow.com/questions/50130902/question-mark-in-url-when-make-login)
-
   //   try {
   //     const response = await axios.post('http://localhost:3000/login', {
   //       email,
   //       password,
   //     });
-
+  
   //     const { access_token } = response.data;
-
-  //     // Save the access token to local storage or a state management tool
-  //     localStorage.setItem('access_token', access_token);
-
+  
+  //     // Save the access token to local storage
+  //     localStorage.setItem('jwtToken', access_token); // Ensure consistent token key
+  
   //     // Trigger the onLogin callback to navigate to the home page
-  //     onLogin();
-  //     // Use the navigate function to go to the /document path
+  //     // onLogin();
+  
+  //     // Use the navigate function to go to the /userHomePage path
   //     navigate('/userHomePage');
-
+  
   //   } catch (error) {
-  //     setLoginFailed(true)
-
-  //     console.error('Login failed:', error);
+  //     setLoginFailed(true);
+  
+  //     // More detailed error handling
+  //     if (error.response) {
+  //       // The request was made and the server responded with a status code
+  //       // that falls out of the range of 2xx
+  //       console.error('Login failed:', error.response.data);
+  //       // Display error message based on error.response.data
+  //     } else if (error.request) {
+  //       // The request was made but no response was received
+  //       console.error('Login failed: No response from server');
+  //       // Display a network error message
+  //     } else {
+  //       // Something happened in setting up the request that triggered an Error
+  //       console.error('Login Error:', error.message);
+  //       // Display a generic error message
+  //     }
   //     // Handle login failure (e.g., show an error message)
   //   }
   // };
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post('http://localhost:3000/login', {
-        email,
-        password,
-      });
+      const auth = getAuth();
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
   
-      const { access_token } = response.data;
+      // Get the user
+      const user = userCredential.user;
   
-      // Save the access token to local storage
-      localStorage.setItem('jwtToken', access_token); // Ensure consistent token key
+      // Get the ID token
+      const token = await user.getIdToken();
   
-      // Trigger the onLogin callback to navigate to the home page
-      // onLogin();
+      // Save the ID token to local storage
+      localStorage.setItem('jwtToken', token);
   
-      // Use the navigate function to go to the /userHomePage path
+      // Navigate to user home page
       navigate('/userHomePage');
   
     } catch (error) {
       setLoginFailed(true);
-  
-      // More detailed error handling
-      if (error.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
-        console.error('Login failed:', error.response.data);
-        // Display error message based on error.response.data
-      } else if (error.request) {
-        // The request was made but no response was received
-        console.error('Login failed: No response from server');
-        // Display a network error message
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        console.error('Login Error:', error.message);
-        // Display a generic error message
-      }
+      console.error('Login Error:', error.message);
       // Handle login failure (e.g., show an error message)
     }
   };
-
   // useEffect to close success alerts after 3000 milliseconds (adjust as needed)
   useEffect(() => {
     if (loginFailed) {
@@ -173,25 +166,7 @@ const LoginSignUp = () => {
   // UI mostly borrow from this website
   return (
     <div>
-      {/* <h2>Login</h2>
-      {loginFailed && (
-          <Stack sx={{ width: '100%' }} spacing={2} >
-            <Alert severity="error">Wrong username or password !</Alert>
-          </Stack>
-        )}
-      <label>
-        Email:
-        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-      </label>
-      <br />
-      <label>
-        Password:
-        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-      </label>
-      <br />
-      <button onClick={handleLogin}>Login</button>
 
-      <button  onClick={() => navigate("/register")}>Register</button> */}
 
       {/* //////////////////// */}
       <div className={`container ${isSignUpMode ? 'sign-up-mode' : ''}`}>
