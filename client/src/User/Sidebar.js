@@ -9,9 +9,9 @@ const Sidebar = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const jwtToken = localStorage.getItem('jwtToken'); // Replace with your token retrieval method
+    const jwtToken = localStorage.getItem('jwtToken'); // Get the token that was saved in the LocalStorage
     if (!jwtToken) {
-      navigate('/login'); // Redirect to login if no token is found
+      navigate('/login'); // Move back to the login page if token not found
       return;
     }
 
@@ -49,14 +49,14 @@ const Sidebar = () => {
   };
 
   const w3Open = () => {
-    document.getElementById("main").style.marginLeft = "22%";
+    document.getElementById("main").style.marginLeft = "20%";
     document.getElementById("mySidebar").style.width = "20%";
     document.getElementById("mySidebar").style.display = "block";
     document.getElementById("openNav").style.display = 'none';
   }
 
   const w3Close = () => {
-    document.getElementById("main").style.marginLeft = "1%";
+    document.getElementById("main").style.marginLeft = "0%";
     document.getElementById("mySidebar").style.display = "none";
     document.getElementById("openNav").style.display = "inline-block";
   }
@@ -69,7 +69,7 @@ const Sidebar = () => {
     <div className="container-fluid">
 
       <div className="w3-sidebar w3-bar-block w3-card w3-animate-left" id="mySidebar" >
-        <h2>Language Model AI</h2>
+        <h2>Language Sculptor</h2>
         {userData ? (
           <div>
             <p>Email: {userData.email}</p>

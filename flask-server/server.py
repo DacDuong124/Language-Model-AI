@@ -3,9 +3,9 @@ from flask_cors import CORS
 import requests
 
 import json
-from datetime import datetime, timedelta, timezone
-from flask_jwt_extended import create_access_token,get_jwt,get_jwt_identity, \
-                               unset_jwt_cookies, jwt_required, JWTManager
+import datetime
+# from flask_jwt_extended import create_access_token,get_jwt,get_jwt_identity, \
+#                                unset_jwt_cookies, jwt_required, JWTManager
                                
 import firebase_admin
 from firebase_admin import credentials, auth, firestore, initialize_app
@@ -113,47 +113,7 @@ def register():
         return jsonify({"error": str(e)}), 400
     
 
-# @app.route('/login', methods=["POST"])
 
-
-# def login():
-#     try:
-#         data = request.json
-#         email = data.get('email')
-#         password = data.get('password')
-
-#         if not email or not password:
-#             return jsonify({"error": "Email and password are required"}), 400
-
-#         # Mimic Firebase authentication on the server side
-#         result = sign_in_with_email_and_password(email, password)
-
-#         # You may want to handle different cases here based on the result
-#         if "error" in result:
-#             return jsonify({"error": "Invalid Username or Password"}), 401
-#         else:
-            
-#             # Create an access token using Flask-JWT-Extended
-#             access_token = create_access_token(identity=email)
-#             return jsonify({"message": "Login successful",
-#                             "returnSecureToken": result.get("returnSecureToken", None), #this will result null
-#                             "access_token": access_token}), 200
-
-#     except Exception as e:
-#         return jsonify({"error": str(e)}), 500
-
-# def sign_in_with_email_and_password(email, password, return_secure_token=True):
-#     payload = json.dumps({
-#         "email": email,
-#         "password": password,
-#         "returnSecureToken": return_secure_token #still not display the returnSecureToken
-#     })
-
-#     rest_api_url = f"https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key={FIREBASE_WEB_API_KEY}"
-
-#     response = requests.post(rest_api_url, data=payload)
-
-#     return response.json()
 
 def verify_firebase_token(token):
     try:
@@ -162,84 +122,23 @@ def verify_firebase_token(token):
     except Exception as e:
         print("Detailed error verifying Firebase token:", str(e))
         return None
-@app.route('/login', methods=["POST"])
-def login():
-    data = request.json
-    email = data.get('email')
-    password = data.get('password')
 
-    if not email or not password:
-        return jsonify({"error": "Email and password are required"}), 400
+# @app.route('/login', methods=["POST"])
+# def login():
+#     data = request.json
+#     email = data.get('email')
+#     password = data.get('password')
 
-    try:
-        # Attempt to sign in the user with the provided credentials
-        user = auth.get_user_by_email(email)
-        # You can add additional checks here (e.g., verify password if needed)
-        return jsonify({"message": "Login successful", "user_id": user.uid}), 200
-    except Exception as e:
-        return jsonify({"error": str(e)}), 401
-    
+#     if not email or not password:
+#         return jsonify({"error": "Email and password are required"}), 400
 
-# @app.route("/profile", methods=["GET"])
-# @jwt_required()
-# def profile():
 #     try:
-#         # Retrieve the identity from the JWT
-#         identity = get_jwt_identity()
-
-#         try:
-#             # Fetch user data from Firebase Authentication
-#             # If identity is email, use get_user_by_email; otherwise, use get_user
-#             if "@" in identity:  # Simple check if identity is an email
-#                 user = auth.get_user_by_email(identity)
-#             else:
-#                 user = auth.get_user(identity)
-
-#             # Include user data in the response
-#             response_data = {
-#                 "uid": user.uid,
-#                 "email": user.email,
-#                 # Add any other user data you want to include
-#             }
-
-#             return jsonify(response_data), 200
-
-#         except firebase_admin.auth.UserNotFoundError:
-#             return jsonify({"error": f"No user record found for the provided identity: {identity}"}), 404
-
+#         # Attempt to sign in the user with the provided credentials
+#         user = auth.get_user_by_email(email)
+#         # You can add additional checks here (e.g., verify password if needed)
+#         return jsonify({"message": "Login successful", "user_id": user.uid}), 200
 #     except Exception as e:
-#         return jsonify({"error": str(e)}), 500
-
-# @app.route("/profile", methods=["GET", "PATCH"])
-# @jwt_required()
-# def profile():
-#     try:
-#         # Retrieve the identity from the JWT
-#         identity = get_jwt_identity()
-#         if request.method == 'GET':
-
-#             try:
-#             # Fetch user data from Firebase Authentication
-#             # If identity is email, use get_user_by_email; otherwise, use get_user
-#                 if "@" in identity:  # Simple check if identity is an email
-#                     user = auth.get_user_by_email(identity)
-#                 else:
-#                     user = auth.get_user(identity)
-
-#                 # Include user data in the response
-#                 response_data = {
-#                 "uid": user.uid,
-#                 "email": user.email,
-#                 # Add any other user data you want to include
-#             }
-
-#                 return jsonify(response_data), 200
-#             except firebase_admin.auth.UserNotFoundError:
-#                 return jsonify({"error": f"No user record found for the provided identity: {identity}"}), 404
-
-#     except Exception as e:
-#         return jsonify({"error": str(e)}), 500
-
+#         return jsonify({"error": str(e)}), 401
 
 @app.route("/profile", methods=["GET", "PATCH"])
 def profile():
@@ -263,20 +162,36 @@ def profile():
 
             if user_doc.exists:
                 user_data = user_doc.to_dict()
-                response_data = {
-                    "uid": user.uid,
+            else:
+                
+                 # Split the displayName to get firstName and lastName
+                full_name = user.display_name.split()
+                first_name = full_name[0] if full_name else ''
+                last_name = full_name[-1] if len(full_name) > 1 else ''
+                # Create a new document with default values
+                user_data = {
                     "email": user.email,
-                    "firstName": user_data.get("firstName", ""),
-                    "lastName": user_data.get("lastName", ""),
-                    "role": user_data.get("role", ""),  
-                    "status": user_data.get("status", ""),
-                    # "registered_on": user_data.get("registered_on",""),
-                    "registered_on": user_data.get("registered_on").isoformat() if user_data.get("registered_on") else None,  # Convert to string if set
+                    "firstName": first_name,
+                    "lastName": last_name,
+                    "role": "user",  # Set default role
+                    "status": "active",
+                    # Set 'registered_on' to current time
+                    "registered_on": datetime.datetime.now(datetime.timezone.utc).isoformat()
 
                 }
-                return jsonify(response_data), 200
-            else:
-                return jsonify({"error": "User profile does not exist."}), 404
+                user_ref.set(user_data)
+
+            # Construct the response data
+            response_data = {
+                "uid": user.uid,
+                "email": user.email,
+                "firstName": user_data.get("firstName", ""),
+                "lastName": user_data.get("lastName", ""),
+                "role": user_data.get("role", ""),  
+                "status": user_data.get("status", ""),
+                "registered_on": user_data.get("registered_on"),
+            }
+            return jsonify(response_data), 200
 
         except firebase_admin.auth.UserNotFoundError:
             return jsonify({"error": f"No user record found for the provided user ID: {user_uid}"}), 404

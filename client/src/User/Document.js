@@ -2,6 +2,7 @@ import { useState } from 'react';
 // import axios from "axios";
 // import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
+import '../App.css'
 
 function Document() {
   const [inputPrompt, setInputPrompt] = useState({
@@ -43,84 +44,71 @@ function Document() {
   };
 
   return (
-    <div>
+    <div className='userDocumentBackGround'>
 
-      <label>
-        <h1>Enter Prompt:</h1>
-        {/* <input
+      <div >
+        <label>
+          <h1>Enter Prompt:</h1>
+          {/* <input
           style={{ width: `${inputPrompt.input.length * 8}px` }}
 
           type="text"
           value={inputPrompt.input}
           onChange={handleInputChange}
         /> */}
-        <Box
-          sx={{
-            width: 500,
-            maxWidth: '100%',
-          }}
-        >
-          <h3>What do want the AI to do ?</h3>
-          <textarea style={{ fontSize: '15px' }}
-            cols="80"
-            rows="10"
-            type="text"
+          <Box
+            sx={{
+              width: 500,
+              maxWidth: '100%',
+            }}
+          >
+            <h3>What do want the AI to do ?</h3>
+            <textarea style={{ fontSize: '15px' }}
+              cols="80"
+              rows="10"
+              type="text"
 
-            value={inputPrompt.input}
-            onChange={handleInputChange}
-          />
-        </Box>
-      </label>
-      <button onClick={handleGenerateCode}>Generate Code</button>
+              value={inputPrompt.input}
+              onChange={handleInputChange}
+            />
+          </Box>
+        </label>
+        <button onClick={handleGenerateCode}>Generate Code</button>
 
-      {error && <div>Error: {error}</div>}
+        {error && <div>Error: {error}</div>}
 
-      {generatedCodeList.length > 0 && (
-        <div>
-          <h3>AI's answer:</h3>
-          {generatedCodeList.map((code, index) => (
+        {generatedCodeList.length > 0 && (
+          <div>
+            <h3>AI's answer:</h3>
+            {generatedCodeList.map((code, index) => (
 
-            <pre style={{ fontSize: '18px' }} key={index}>{code}</pre>
-          ))}
-        </div>
-      )}
-
-      {/* <nav className="navbar navbar-inverse visible-xs">
-        <div className="container-fluid">
-          <div className="navbar-header">
-            <button type="button" className="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-              <span className="icon-bar"></span>
-              <span className="icon-bar"></span>
-              <span className="icon-bar"></span>
-            </button>
-            <a className="navbar-brand" href="#">Logo</a>
+              <pre style={{ fontSize: '18px' }} key={index}>{code}</pre>
+            ))}
           </div>
-          <div className="collapse navbar-collapse" id="myNavbar">
-            <ul className="nav navbar-nav">
-              <li className="active"><a href="#">Dashboard</a></li>
-              <li><a href="#">Age</a></li>
-              <li><a href="#">Gender</a></li>
-              <li><a href="#">Geo</a></li>
-            </ul>
-          </div>
+        )}
+      </div>
+
+      <div className='userDocumentSection'>
+
+        <div className='userDocumentCard'>
+          <h3>Document Title1</h3>
+          <p>Document description or content preview...</p>
         </div>
-      </nav> */}
+        <div className='userDocumentCard'>
+          <h3>Document Title2</h3>
+          <p>Document description or content preview...</p>
+        </div>
+        <div className='userDocumentCard'>
+          <h3>Document Title3</h3>
+          <p>Document description or content preview...</p>
+        </div>
+
+      </div>
+
     </div>
 
   );
 };
 export default Document;
 
-// Home.js
-// import React from 'react';
 
-// const Document = () => {
-//   return (
-//     <div>
-//       <h2>Welcome to the Home Page!</h2>
-//       {/* Add your home page content here */}
-//     </div>
-//   );
-// };
-
-// export default Document;

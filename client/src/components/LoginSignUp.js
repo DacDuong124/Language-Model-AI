@@ -1,8 +1,12 @@
 // Login.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { useNavigate, Link } from 'react-router-dom';
+import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider, OAuthProvider } from "firebase/auth";
+// import {  createUserWithEmailAndPassword } from "firebase/auth";
+
+// import { doc, setDoc, serverTimestamp } from "firebase/firestore"; 
+// import { db } from '../firebase-config'; // Adjust the path to the firebase-config.js file
 
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
@@ -48,21 +52,145 @@ const LoginSignUp = () => {
         email,
         password,
       });
-
-
-
-      // Use the navigate function to go to the /login path
-      // navigate('/login');
-      setRegisterSuccess(true)
-
+      if (response.status === 201) {
+        // Registration successful
+        setRegisterSuccess(true);
+        // Uncomment this if you want to navigate to the login page after successful registration
+        // navigate('/login');
+      } else {
+        // Handle unexpected response
+        console.error('Register failed: Unexpected response', response);
+        setRegisterFailed(true);
+      }
     } catch (error) {
-      setRegisterFailed(true)
-
-      console.error('Register failed:', error);
-      // Handle login failure (e.g., show an error message)
+      setRegisterFailed(true);
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        console.error('Register failed:', error.response.data);
+        // Display error message based on error.response.data
+      } else if (error.request) {
+        // The request was made but no response was received
+        console.error('Register failed: No response from server');
+        // Display a network error message
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.error('Register Error:', error.message);
+        // Display a generic error message
+      }
     }
-
   }
+  // const signMeUp = async (email, password) => {
+  //   try {
+  //     const auth = getAuth();
+  //     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+  //     const user = userCredential.user;
+
+  //     // Prepare user data for Firestore
+  //     const user_data = {
+  //       email: user.email, // Email provided from the userCredential object
+  //       role: "user",     // Default role
+  //       status: "active", // Default status
+  //       registered_on: serverTimestamp(), // Firebase server timestamp
+  //     };
+
+  //     // Create a new document for the user in the 'users' collection
+  //     await setDoc(doc(db, 'users', user.uid), user_data);
+
+  //     // Update the client state as needed
+  //     setRegisterSuccess(true);
+
+  //     // Navigate to user home page
+  //     navigate('/userHomePage');
+  //   } catch (error) {
+  //     setRegisterFailed(true);
+  //     console.error('Register Error:', error.message);
+  //     // Handle different error types here
+  //   }
+  // };
+
+
+
+  const handleGoogleSignIn = async () => {
+    try {
+      const auth = getAuth();
+      const provider = new GoogleAuthProvider();
+
+      // This will handle the Google Sign-In popup
+      const result = await signInWithPopup(auth, provider);
+
+      // Get the user from the result
+      const user = result.user;
+
+      // Get the ID token
+      const token = await user.getIdToken();
+
+      // Save the ID token to local storage
+      localStorage.setItem('jwtToken', token);
+
+      // Navigate to user home page
+      navigate('/userHomePage');
+    } catch (error) {
+      // Handle any errors here
+      console.error("Error during Google sign-in:", error);
+    }
+  };
+
+  const handleFacebookSignIn = async () => {
+    try {
+      const auth = getAuth();
+      const provider = new FacebookAuthProvider();
+
+      // This will handle the Facebook Sign-In popup
+      const result = await signInWithPopup(auth, provider);
+
+      // Get the user from the result
+      const user = result.user;
+
+      // Get the ID token
+      const token = await user.getIdToken();
+
+      // Save the ID token to local storage
+      localStorage.setItem('jwtToken', token);
+
+      // Navigate to user home page
+      navigate('/userHomePage');
+    } catch (error) {
+      // Handle any errors here
+      console.error("Error during Facebook sign-in:", error);
+    }
+  };
+
+  const handleMicrosoftSignIn = async () => {
+    try {
+      const auth = getAuth();
+      const provider = new OAuthProvider('microsoft.com');
+
+      // You can add scopes and custom parameters if needed
+      provider.addScope('mail.read');
+      provider.setCustomParameters({
+        // Optional parameters.
+      });
+
+      // This will handle the Microsoft Sign-In popup
+      const result = await signInWithPopup(auth, provider);
+
+      // Get the user from the result
+      const user = result.user;
+
+      // Get the ID token
+      const token = await user.getIdToken();
+
+      // Save the ID token to local storage
+      localStorage.setItem('jwtToken', token);
+
+      // Navigate to user home page
+      navigate('/userHomePage');
+    } catch (error) {
+      // Handle any errors here
+      console.error("Error during Microsoft sign-in:", error);
+    }
+  };
 
   // const handleLogin = async () => {
   //   try {
@@ -70,21 +198,21 @@ const LoginSignUp = () => {
   //       email,
   //       password,
   //     });
-  
+
   //     const { access_token } = response.data;
-  
+
   //     // Save the access token to local storage
   //     localStorage.setItem('jwtToken', access_token); // Ensure consistent token key
-  
+
   //     // Trigger the onLogin callback to navigate to the home page
   //     // onLogin();
-  
+
   //     // Use the navigate function to go to the /userHomePage path
   //     navigate('/userHomePage');
-  
+
   //   } catch (error) {
   //     setLoginFailed(true);
-  
+
   //     // More detailed error handling
   //     if (error.response) {
   //       // The request was made and the server responded with a status code
@@ -108,19 +236,19 @@ const LoginSignUp = () => {
     try {
       const auth = getAuth();
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
-  
+
       // Get the user
       const user = userCredential.user;
-  
+
       // Get the ID token
       const token = await user.getIdToken();
-  
+
       // Save the ID token to local storage
       localStorage.setItem('jwtToken', token);
-  
+
       // Navigate to user home page
       navigate('/userHomePage');
-  
+
     } catch (error) {
       setLoginFailed(true);
       console.error('Login Error:', error.message);
@@ -198,20 +326,20 @@ const LoginSignUp = () => {
 
               <p className="social-text">Or Sign in with social platforms</p>
               <div className="social-media">
-                <a href="#" className="social-icon">
+                <Link onClick={handleGoogleSignIn} className="social-icon">
                   {/* GOOGLE */}
                   <i ><FontAwesomeIcon icon={faGoogle} /></i>
-                </a>
+                </Link>
 
                 {/* FACEBOOK */}
-                <a href="#" className="social-icon">
+                <Link onClick={handleFacebookSignIn} className="social-icon">
                   <i><FontAwesomeIcon icon={faFacebook} /></i>
-                </a>
+                </Link>
 
                 {/* MICROSOFT */}
-                <a href="#" className="social-icon">
+                <Link onClick={handleMicrosoftSignIn} className="social-icon">
                   <i><FontAwesomeIcon icon={faMicrosoft} /></i>
-                </a>
+                </Link>
 
                 {/*<a href="#" className="social-icon">
                   <i className="fab fa-linkedin-in"></i>
@@ -261,22 +389,22 @@ const LoginSignUp = () => {
               */}
               <button className="btn solid" id="sign-up-btn" type="button" onClick={signMeUp}>Create Account</button>
 
-              <p className="social-text">Or Sign up with social platforms</p>
+              <p className="social-text">Or Sign in with social platforms</p>
               <div className="social-media">
-                <a href="#" className="social-icon">
+                <Link onClick={handleGoogleSignIn} className="social-icon">
                   {/* GOOGLE */}
                   <i ><FontAwesomeIcon icon={faGoogle} /></i>
-                </a>
+                </Link>
 
                 {/* FACEBOOK */}
-                <a href="#" className="social-icon">
+                <Link onClick={handleFacebookSignIn} className="social-icon">
                   <i><FontAwesomeIcon icon={faFacebook} /></i>
-                </a>
+                </Link>
 
                 {/* MICROSOFT */}
-                <a href="#" className="social-icon">
+                <Link onClick={handleMicrosoftSignIn} className="social-icon">
                   <i><FontAwesomeIcon icon={faMicrosoft} /></i>
-                </a>
+                </Link>
                 {/* <a href="#" className="social-icon">
                   <i className="fab fa-google"></i>
                 </a>*/}

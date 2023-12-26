@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { updatePassword } from "firebase/auth";
-import { auth } from '../firebase-config'; // Adjust the path to your Firebase config file
+import { auth } from '../firebase-config'; // Adjust the path to the firebase-config.js file
 import moment from 'moment';
 
 import './sidebar.css'; // Import your styles
@@ -283,18 +283,24 @@ const UserProfile = () => {
             label="User Role"
             variant="standard"
             value={role}
+            InputProps={{ readOnly: true }}
+
           />
           <TextField
             type="registerDate"
             label="Registration Date"
             variant="standard"
             value={formatDate(registeredDate)}
+            InputProps={{ readOnly: true }}
+
           />
           <TextField
             type="status"
             label="User Status"
             variant="standard"
             value={status}
+            InputProps={{ readOnly: true }}
+
           />
 
         </Box>
