@@ -8,7 +8,9 @@ import datetime
 #                                unset_jwt_cookies, jwt_required, JWTManager
                                
 import firebase_admin
+
 from firebase_admin import credentials, auth, firestore, initialize_app
+from google.cloud import storage
 
 app = Flask(__name__)
 # help(firebase_admin.auth)
@@ -231,6 +233,12 @@ def profile():
         return jsonify({"error": "Method not allowed"}), 405
 #####################
 
+
+# Initialize a storage client
+storage_client = storage.Client()
+# Get the bucket from the storage client
+bucket = storage_client.get_bucket('language-ai-model.appspot.com')
+
 @app.route('/delete_account', methods=['DELETE'])
 def delete_account():
     # Extract the token from the Authorization header
@@ -242,13 +250,36 @@ def delete_account():
 
     user_uid = decoded_token['uid']
     try:
+        # Reference to the Firestore user's document
+        user_ref = db.collection('users').document(user_uid)
+        
+        # Reference to the user's documents subcollection
+        docs_ref = user_ref.collection('documents')
+        
+        # Delete all documents within the subcollection
+        docs = docs_ref.stream()
+        for doc in docs:
+            doc_data = doc.to_dict()
+            file_name = doc_data.get('name')
+            if file_name:
+                # Create a reference to the file to delete
+                blob = bucket.blob(f'user_files/{user_uid}/{file_name}')
+                # Delete the file
+                blob.delete()
+
+            # Delete the document reference in Firestore
+            doc.reference.delete()
+
+        # Delete the user's document from Firestore
+        user_ref.delete()
+            
         # Delete the user from Firebase Authentication
         auth.delete_user(user_uid)
         
         # Delete the user's document from Firestore
         db.collection('users').document(user_uid).delete()
         
-        return jsonify({"message": "User account deleted successfully"}), 200
+        return jsonify({"message": "User account and all of their files deleted successfully"}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 

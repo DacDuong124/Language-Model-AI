@@ -1,94 +1,91 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 // import axios from "axios";
 // import { useNavigate } from 'react-router-dom';
-import Box from '@mui/material/Box';
+import { getAuth } from "firebase/auth";
+import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
+import { doc, setDoc, getFirestore } from "firebase/firestore";
 import '../App.css'
 
+
 function Document() {
-  const [inputPrompt, setInputPrompt] = useState({
-    input: '',
-  });
-  const [generatedCodeList, setGeneratedCodeList] = useState([]);
-  const [error, setError] = useState('');
 
-  const handleGenerateCode = async () => {
-    try {
-      console.log('Requesting code generation with prompt:', inputPrompt.input);
+  // Initialize Firestore
+  const firestore = getFirestore();
+  // Get the currently logged-in user from Firebase Authentication
+  const auth = getAuth();
+  const user = auth.currentUser;
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
-      const response = await fetch("http://localhost:3000/generate_code", {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ prompts: [inputPrompt.input] }),
-      });
 
-      if (!response.ok) {
-        throw new Error(`Failed to generate code. Status: ${response.status}`);
-      }
-
-      const result = await response.json();
-      if (result.generated_code && result.generated_code.length > 0) {
-        setGeneratedCodeList(result.generated_code);
-      } else {
-        setError("No generated code received from the server");
-      }
-    } catch (error) {
-      console.error('Error generating code:', error.message);
-      setError("An error occurred while generating code");
+  const handleFileChange = (event) => {
+    // Get the file from the input
+    const file = event.target.files[0];
+    if (file) {
+      // Set the state to the selected file
+      setSelectedFile(file);
+      // You can also perform file upload here or in a separate function
     }
   };
 
-  const handleInputChange = (e) => {
-    setInputPrompt({ input: e.target.value });
+  const handleFileUpload = async () => {
+    if (selectedFile && user) {
+      const storage = getStorage();
+      const fileRef = storageRef(storage, `user_files/${user.uid}/${selectedFile.name}`);
+  
+      try {
+        const snapshot = await uploadBytes(fileRef, selectedFile);
+        const downloadURL = await getDownloadURL(snapshot.ref);
+  
+        const documentData = {
+          name: selectedFile.name,
+          url: downloadURL,
+          createdAt: new Date()
+        };
+  
+        await setDoc(doc(firestore, `users/${user.uid}/documents`, selectedFile.name), documentData);
+  
+        alert('File uploaded successfully!');
+        setUploadProgress(100);
+      } catch (error) {
+        console.error('Upload failed:', error);
+        alert('Upload failed!');
+      }
+    } else {
+      alert('No file selected or user not logged in');
+    }
   };
 
   return (
     <div className='userDocumentBackGround'>
 
-      <div >
-        <label>
-          <h1>Enter Prompt:</h1>
-          {/* <input
-          style={{ width: `${inputPrompt.input.length * 8}px` }}
-
-          type="text"
-          value={inputPrompt.input}
-          onChange={handleInputChange}
-        /> */}
-          <Box
-            sx={{
-              width: 500,
-              maxWidth: '100%',
-            }}
-          >
-            <h3>What do want the AI to do ?</h3>
-            <textarea style={{ fontSize: '15px' }}
-              cols="80"
-              rows="10"
-              type="text"
-
-              value={inputPrompt.input}
-              onChange={handleInputChange}
-            />
-          </Box>
-        </label>
-        <button onClick={handleGenerateCode}>Generate Code</button>
-
-        {error && <div>Error: {error}</div>}
-
-        {generatedCodeList.length > 0 && (
-          <div>
-            <h3>AI's answer:</h3>
-            {generatedCodeList.map((code, index) => (
-
-              <pre style={{ fontSize: '18px' }} key={index}>{code}</pre>
-            ))}
-          </div>
-        )}
-      </div>
 
       <div className='userDocumentSection'>
+
+        <div className='userDocumentCard'>
+          <h3>Upload</h3>
+          <p>Document description or content preview...</p>
+          <div>
+            <input
+              type="file"
+              onChange={handleFileChange}
+              style={{ display: 'none' }} // Hide the default input
+              id="file-upload" // Refer to this id when triggering click event
+            />
+            <button
+              onClick={() => document.getElementById('file-upload').click()} // Trigger file input click on button click
+            >
+              Choose File
+            </button>
+            {selectedFile && (
+              <>
+                <span>{selectedFile.name}</span>
+                <button onClick={handleFileUpload}>Upload File</button>
+                <progress value={uploadProgress} max="100"></progress>
+              </>
+            )}
+          </div>
+        </div>
 
         <div className='userDocumentCard'>
           <h3>Document Title1</h3>

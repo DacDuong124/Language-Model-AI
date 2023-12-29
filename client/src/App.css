@@ -473,12 +473,12 @@ input:-webkit-autofill:active {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;     /* Adjust the space between the cards as needed */
-    justify-content: center;     /* Center the cards in the container */
+    justify-content: left;     /* Center the cards in the container */
 }
 
 .userDocumentCard {
     background: white;
-    width: 300px;
+    width: 170px;
     /* Adjust width as needed */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     /* Soft shadow for depth */
