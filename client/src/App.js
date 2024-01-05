@@ -16,6 +16,7 @@ import Sidebar from './User/Sidebar';
 import Trash from './User/Trash';
 import UserProfile from './User/UserProfile';
 import Subscription from './User/Subscription';
+import ViewDocument from './User/ViewDocument';
 
 
 function App() {
@@ -45,7 +46,7 @@ function App() {
 
         <Route path='/' element={<Sidebar />}>
           <Route path='/userHomePage' element={<UserHomePage />}></Route>
-
+          <Route path='/viewDocument' element={<ViewDocument />}></Route>
           <Route path='/document' element={<Document />}></Route>
 
 

@@ -20,7 +20,7 @@
     "axios": "^1.6.2",
     "firebase": "^10.7.1",
     "mdb-react-ui-kit": "^7.0.0",
-    "moment": "^2.29.4",
+    "moment": "^2.30.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.20.0",

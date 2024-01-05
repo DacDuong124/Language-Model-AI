@@ -2,8 +2,11 @@ import { useState } from 'react';
 // import axios from "axios";
 // import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
+import { useLocation } from 'react-router-dom';
 
 function ViewDocument() {
+  const location = useLocation();
+  const document = location.state?.document;
   const [inputPrompt, setInputPrompt] = useState({
     input: '',
   });

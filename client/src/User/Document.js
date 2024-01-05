@@ -5,6 +5,7 @@ import { getAuth } from "firebase/auth";
 import { getStorage, ref as storageRef, uploadBytes, getDownloadURL, deleteObject  } from "firebase/storage";
 import { doc, setDoc, getFirestore, deleteDoc } from "firebase/firestore";
 import { collection, query, getDocs } from "firebase/firestore";
+import { useNavigate } from 'react-router-dom';
 
 import '../App.css'
 
@@ -19,8 +20,12 @@ function Document() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [uploadProgress, setUploadProgress] = useState(0);
 
+  //Create var for changing view
+  const navigate = useNavigate();
 
-
+  const handleCardClick = (doc) => {
+    navigate('/viewDocument', { state: { document: doc } });
+  };  
 
 
   const handleFileChange = (event) => {
@@ -157,7 +162,7 @@ function Document() {
         </div>
 
         {documents.map((doc, index) => (
-          <div key={index} className='userDocumentCard'>
+          <div key={index} className='userDocumentCard' onClick={() => handleCardClick(doc)}>
             <h3>{doc.name}</h3>
             <p>Document description or content preview...</p>
             <a href={doc.url} target="_blank" rel="noopener noreferrer">Download</a>
