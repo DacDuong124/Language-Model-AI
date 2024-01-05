@@ -110,7 +110,8 @@ function Document() {
     return () => unsubscribe();
   }, [user, firestore]);
 
-  const deleteFile = async (fileName) => {
+  const deleteFile = async (e, fileName) => {
+    e.stopPropagation();
     if (!user) return;
   
     try {
@@ -165,9 +166,9 @@ function Document() {
           <div key={index} className='userDocumentCard' onClick={() => handleCardClick(doc)}>
             <h3>{doc.name}</h3>
             <p>Document description or content preview...</p>
-            <a href={doc.url} target="_blank" rel="noopener noreferrer">Download</a>
-            
-            <button onClick={() => deleteFile(doc.name)}>Delete</button>
+            <a href={doc.url} onClick={(e) => e.stopPropagation()} target="_blank" rel="noopener noreferrer">Download</a>
+            <button onClick={(e) => deleteFile(e, doc.name)}>Delete</button>
+
 
             {/* You can also add a link to download or view the document */}
           </div>
