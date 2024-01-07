@@ -68,11 +68,40 @@ const Sidebar = () => {
     w3Open();
   }, []); // Empty dependency array means this effect runs once after initial render
 
-  return (
-    <div className="container-fluid">
+return (
+  <div className="container-fluid">
+    <div className="w3-sidebar w3-bar-block w3-card w3-animate-left" id="mySidebar">
+      <h2>Language Sculptor</h2>
+      
+      <button className="w3-bar-item w3-button w3-large" onClick={w3Close}>Close &times;</button>
+      <nav>
+        <ul>
+          <li>
+            <Link to="/document">
+              <FontAwesomeIcon icon={faFile} className="fa-icon" /> My documents
+            </Link>
+          </li>
+          <li>
+            <Link to="/trash">
+              <FontAwesomeIcon icon={faTrash} className="fa-icon" /> Trash
+            </Link>
+          </li>
+          <li>
+            <Link to="/userprofile">
+              <FontAwesomeIcon icon={faUser} className="fa-icon" /> My Profile
+            </Link>
+          </li>
+          <li>
+            <Link to="/subscription">
+              <FontAwesomeIcon icon={faStar} className="fa-icon" /> Premium Subscription
+            </Link>
+          </li>
+        </ul>
+      </nav>
 
-      <div className="w3-sidebar w3-bar-block w3-card w3-animate-left" id="mySidebar" >
-        <h2>Language Sculptor</h2>
+      {/* Logout */}
+      <div className="sidebar-bottom">
+        <Link to="/" onClick={handleLogout}><h3>Log Out</h3></Link>
         {userData ? (
           <div>
             <p>Email: {userData.email}</p>
@@ -81,45 +110,8 @@ const Sidebar = () => {
         ) : (
           <p>Loading user data...</p>
         )}
-
-
-        <button className="w3-bar-item w3-button w3-large" onClick={w3Close}>Close &times;</button>
-        <nav>
-          <ul>
-            <li>
-              <Link to="/document">
-                <FontAwesomeIcon icon={faFile} className="fa-icon" /> My documents
-              </Link>
-            </li>
-            <li>
-              <Link to="/trash">
-                <FontAwesomeIcon icon={faTrash} className="fa-icon" /> Trash
-              </Link>
-            </li>
-            <li>
-              <Link to="/userprofile">
-                <FontAwesomeIcon icon={faUser} className="fa-icon" /> My Profile
-              </Link>
-            </li>
-            <li>
-              <Link to="/subscription">
-                <FontAwesomeIcon icon={faStar} className="fa-icon" /> Premium Subscription
-              </Link>
-            </li>
-
-            <div style={{ paddingTop: "300px" }}>
-              <li>
-                {/* <h3><Link to="/">Log Out</Link></h3> */}
-                {/* <button onClick={handleLogout}><h3>Log Out</h3></button> */}
-                <Link to="/"><h3 onClick={handleLogout}>Log Out</h3></Link>
-              
-              </li>
-            </div>
-
-          </ul>
-
-        </nav>
       </div>
+    </div>
 
 
       <div id='main'>
