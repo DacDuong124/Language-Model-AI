@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import requests
+import text_correction
 
 import json
 import datetime
@@ -280,6 +281,23 @@ def delete_account():
         db.collection('users').document(user_uid).delete()
         
         return jsonify({"message": "User account and all of their files deleted successfully"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+@app.route("/correct_document", methods=["POST"])
+def correct_document():
+    try:
+        data = request.json
+        document_url = data.get('documentUrl')
+        
+        corrected_file_path = text_correction.correct_document_from_url(document_url)
+        
+        if corrected_file_path:
+            # Handle the corrected file, such as sending it back or storing it
+            return jsonify({"message": "Document corrected successfully", "correctedFilePath": corrected_file_path})
+        else:
+            return jsonify({"error": "Failed to correct document"})
+
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 

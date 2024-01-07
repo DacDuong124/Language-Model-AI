@@ -22,6 +22,7 @@ function Document() {
 
   //Create var for changing view
   const navigate = useNavigate();
+  const [correctingDocName, setCorrectingDocName] = useState(null);
 
   const handleCardClick = (doc) => {
     navigate('/viewDocument', { state: { document: doc } });
@@ -131,6 +132,34 @@ function Document() {
       alert('Error deleting file');
     }
   };
+  const correctDocument = async (e, doc) => {
+    e.stopPropagation();
+    setCorrectingDocName(doc.name); // Start the correction process
+  
+    try {
+      const response = await fetch('http://localhost:3000/correct_document', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ documentUrl: doc.url }) // Send the document URL to the server
+      });
+  
+      const responseData = await response.json();
+      if (response.ok) {
+        alert('Document corrected successfully!');
+        // Update the document list or state here if necessary
+      } else {
+        alert(`Error: ${responseData.error}`);
+      }
+    } catch (error) {
+      console.error('Correction request failed:', error);
+      alert('Correction request failed');
+    }
+  
+    setCorrectingDocName(null); // End the correction process
+  };
+  
 
   return (
     <div className='userDocumentBackGround'>
@@ -163,15 +192,14 @@ function Document() {
         </div>
 
         {documents.map((doc, index) => (
-          <div key={index} className='userDocumentCard' onClick={() => handleCardClick(doc)}>
-            <h3>{doc.name}</h3>
-            <p>Document description or content preview...</p>
-            <a href={doc.url} onClick={(e) => e.stopPropagation()} target="_blank" rel="noopener noreferrer">Download</a>
-            <button onClick={(e) => deleteFile(e, doc.name)}>Delete</button>
-
-
-            {/* You can also add a link to download or view the document */}
-          </div>
+            <div key={index} className='userDocumentCard' onClick={() => handleCardClick(doc)}>
+                <h3>{doc.name}</h3>
+                <p>Document description or content preview...</p>
+                <a href={doc.url} onClick={(e) => e.stopPropagation()} target="_blank" rel="noopener noreferrer">Download</a>
+                <button onClick={(e) => deleteFile(e, doc.name)}>Delete</button>
+                <button onClick={(e) => correctDocument(e, doc)}>Correct Text</button>
+                {correctingDocName === doc.name && <div>Correcting...</div>} {/* Show only for the correcting document */}
+            </div>
         ))}
 
 
