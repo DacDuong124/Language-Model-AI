@@ -1,6 +1,8 @@
 // Sidebar.js
 import React, { useEffect, useState } from 'react';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFile, faTrash, faUser, faStar, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import './sidebar.css'; // Import your styles
 // import axios from "axios";
 
@@ -46,6 +48,7 @@ const Sidebar = () => {
 
     // Redirect to the login page or home page
     // navigate('/login'); // or navigate to any other page you see fit
+    navigate('/login');
   };
 
   const w3Open = () => {
@@ -84,16 +87,24 @@ const Sidebar = () => {
         <nav>
           <ul>
             <li>
-              <Link to="/document">My documents</Link>
+              <Link to="/document">
+                <FontAwesomeIcon icon={faFile} className="fa-icon" /> My documents
+              </Link>
             </li>
             <li>
-              <Link to="/trash">Trash</Link>
+              <Link to="/trash">
+                <FontAwesomeIcon icon={faTrash} className="fa-icon" /> Trash
+              </Link>
             </li>
             <li>
-              <Link to="/userprofile">My Profile</Link>
+              <Link to="/userprofile">
+                <FontAwesomeIcon icon={faUser} className="fa-icon" /> My Profile
+              </Link>
             </li>
             <li>
-              <Link to="/subscription">Premium Subscription</Link>
+              <Link to="/subscription">
+                <FontAwesomeIcon icon={faStar} className="fa-icon" /> Premium Subscription
+              </Link>
             </li>
 
             <div style={{ paddingTop: "300px" }}>

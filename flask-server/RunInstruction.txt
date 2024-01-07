@@ -1,3 +1,6 @@
+Install this on client terminal:
+npm install @fortawesome/react-fontawesome @fortawesome/free-solid-svg-icons @fortawesome/fontawesome-svg-core
+
 Run the following in the flask backend:
 $Env:GOOGLE_APPLICATION_CREDENTIALS="path\to\your\service-account-file.json"
 In this case, the file is C:\Users\Admin\Desktop\SEMESTERS\Semester 3 2023\Software Architecture and Design\Language-Model-AI\flask-server\language-ai-model-firebase-adminsdk-l4hgq-1c59e87bd8.json
