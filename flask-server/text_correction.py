@@ -3,6 +3,8 @@ from docx import Document
 from urllib.parse import quote, urlencode, urlparse
 import time
 import os
+import shutil
+
 def custom_urlencode(params):
     return urlencode(params, quote_via=quote)
 
@@ -62,7 +64,7 @@ def correct_document_from_url(document_url):
             # Define the corrected path
             local_corrected_path = f"{local_download_base_path}_corrected.docx"
             # Save the corrected document
-            os.rename(local_download_base_path + "_raw.docx", local_corrected_path)
+            shutil.move(local_download_base_path + "_raw.docx", local_corrected_path)
         else:
             print("No replacements made.")
         return local_corrected_path
