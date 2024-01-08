@@ -1,22 +1,39 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,500&display=swap');
+
+body, html {
+  font-family: 'Roboto', sans-serif;
+}
+
 /* Sidebar.css */
 .sidebar {
   width: 250px;
   height: 100%;
-  background-color: #f4f4f4; 
-  color: #333;
+  background: linear-gradient(to bottom, #6e48aa, #9d50bb);
+  color: #333333;
   padding: 20px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 /* Title */
 .sidebar h2 {
-  margin-bottom: 25px;
+  font-size: 24px;
+  font-weight: 500; 
+  margin-bottom: 30px;
+  border-bottom: 2px solid #fff; 
 }
 
 /* Logout */
 .sidebar h3 {
-  margin-top: 55px;
+  font-weight: normal;
+  color: #007bff; 
+  cursor: pointer;
+  transition: color 0.3s ease;
 }
+
+.sidebar h3:hover {
+  color: #ddd;
+}
+
 
 .sidebar nav ul {
   list-style: none;
@@ -28,10 +45,18 @@
 }
 
 .sidebar nav a {
-  color: white;
-  text-decoration: none;
-  font-size: larger;
+  display: flex;
+  align-items: center; 
+  padding: 10px 15px;
+  color: #fff;
+  border-radius: 5px;
+  transition: background-color 0.3s ease; 
 }
+
+.sidebar nav a:hover {
+  background-color: rgba(255, 255, 255, 0.2); 
+}
+
 
 /* Layout.css */
 .layout {
@@ -53,6 +78,8 @@
   z-index: 1;
   overflow: auto;
   padding: 20px;
+  font-family: 'Roboto', sans-serif;
+  padding-top: 20px;
 }
 
 .w3-card,
@@ -116,12 +143,42 @@
 }
 
 .fa-icon {
-  margin-right: 8px;
-  color: #333; 
+  color: #333;
+  width: 16px; 
+  text-align: center; 
+  margin-right: 12px; 
+  margin-right: 10px;
 }
 
 .sidebar-bottom {
   position: absolute;
   bottom: 20px;
-  width: 100%;
+  width: calc(100% - 40px); 
+}
+
+.sidebar nav a:not(:last-child) {
+  border-bottom: 1px solid #e1e4e8; 
+}
+
+.w3-sidebar .w3-bar-item {
+  border-bottom: 1px solid #e1e4e8; 
+  margin-bottom: 0; 
+}
+
+
+.w3-sidebar .w3-bar-item:last-child {
+  border-bottom: none;
+}
+
+.w3-card {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+.sidebar nav a:hover {
+  background-color: #e9ecef;
+  color: #007bff; 
+}
+
+.sidebar a {
+  transition: color 0.2s, background-color 0.2s;
 }

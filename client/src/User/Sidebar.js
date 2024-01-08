@@ -68,12 +68,15 @@ const Sidebar = () => {
     w3Open();
   }, []); // Empty dependency array means this effect runs once after initial render
 
-return (
-  <div className="container-fluid">
-    <div className="w3-sidebar w3-bar-block w3-card w3-animate-left" id="mySidebar">
-      <h2>Language Sculptor</h2>
-      
-      <button className="w3-bar-item w3-button w3-large" onClick={w3Close}>Close &times;</button>
+  return (
+    <div className="container-fluid">
+      <div className="w3-sidebar w3-bar-block w3-card w3-animate-left" id="mySidebar">
+        
+        {/* Heading */}
+        <button className="w3-bar-item w3-button w3-large" onClick={w3Close}>Close &times;</button>
+  
+        <h2>Language Sculptor</h2>
+
       <nav>
         <ul>
           <li>
@@ -101,15 +104,18 @@ return (
 
       {/* Logout */}
       <div className="sidebar-bottom">
-        <Link to="/" onClick={handleLogout}><h3>Log Out</h3></Link>
-        {userData ? (
-          <div>
-            <p>Email: {userData.email}</p>
-            {/* Display other user data as needed */}
-          </div>
-        ) : (
-          <p>Loading user data...</p>
-        )}
+          <Link to="/" onClick={handleLogout} className="logout-link">
+            <FontAwesomeIcon icon={faSignOutAlt} className="fa-icon" />
+            Log Out
+          </Link>
+          {userData ? (
+            <div className="user-info">
+              <p>Email: {userData.email}</p>
+              {/* Additional user info can be displayed here */}
+            </div>
+          ) : (
+            <p>Loading user data...</p>
+          )}
       </div>
     </div>
 
