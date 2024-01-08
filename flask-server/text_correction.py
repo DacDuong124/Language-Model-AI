@@ -4,6 +4,15 @@ from urllib.parse import quote, urlencode, urlparse
 import time
 import os
 import shutil
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import storage
+from firebase_admin import credentials, auth, firestore
+from google.cloud import storage
+
+# Configure Firebase Admin SDK
+cred = credentials.Certificate("language-ai-model-firebase-adminsdk-l4hgq-1c59e87bd8.json")
+
 
 def custom_urlencode(params):
     return urlencode(params, quote_via=quote)
@@ -11,42 +20,40 @@ def custom_urlencode(params):
 def left_whitespaces_counter(string):
     return len(string) - len(str(string).lstrip())
 
-def download_document(url, local_path):
+def download_document(url):
     try:
         response = requests.get(url)
         response.raise_for_status()
 
-        # Extract a valid filename from the URL (if needed)
+        # Extracting the filename from the URL
         parsed_url = urlparse(url)
         filename = os.path.basename(parsed_url.path)
-        file_extension = filename.split('.')[-1] if '.' in filename else 'txt'  # Default to .txt if no extension found
 
-        local_filename = f"{local_path}.{file_extension}"
-        with open(local_filename, 'wb') as f:
+        # Check if the URL contains a valid filename
+        if not filename:
+            raise ValueError("URL does not contain a valid filename")
+
+        with open(filename, 'wb') as f:
             f.write(response.content)
-        return True
+        return filename  # Return the actual filename used
     except Exception as e:
         print(f"Failed to download document: {e}")
-        return False
+        return None
 
 
-def correct_document_from_url(document_url):
-    # Extract the file extension from the URL
-    file_extension = document_url.rsplit('.', 1)[1].split('?')[0].lower()
 
-    # Define the local download path without the file extension
-    local_download_base_path = "downloaded_document"
-    
-    # Full path including extension
-    local_download_path = f"{local_download_base_path}.{file_extension}"
-
-    # Download the document from the URL
-    if not download_document(document_url, local_download_base_path):
+def correct_document_from_url(document_url, user_id):
+    # Download the document and get the filename
+    downloaded_filename = download_document(document_url)
+    if not downloaded_filename:
         return None  # Exit if the download fails
 
+    # Extract the file extension
+    file_extension = os.path.splitext(downloaded_filename)[1].lower()
+
     # Process the document based on its file type
-    if file_extension == 'docx':
-        doc = Document(local_download_path)
+    if file_extension == '.docx':
+        doc = Document(downloaded_filename)
         replace_list = {}
 
         for paragraph in doc.paragraphs:
@@ -58,19 +65,19 @@ def correct_document_from_url(document_url):
 
         # Apply the replacements to the document
         if replace_list:
-            change_sentences(replace_list, local_download_base_path)
-            change_format(local_download_base_path, local_download_base_path + "_raw")
+            change_sentences(replace_list, downloaded_filename.rstrip(file_extension))
+            change_format(downloaded_filename.rstrip(file_extension), downloaded_filename.rstrip(file_extension) + "_raw")
 
             # Define the corrected path
-            local_corrected_path = f"{local_download_base_path}_corrected.docx"
+            local_corrected_path = os.path.splitext(downloaded_filename)[0] + "_corrected.docx"
             # Save the corrected document
-            shutil.move(local_download_base_path + "_raw.docx", local_corrected_path)
+            shutil.move(downloaded_filename.rstrip(file_extension) + "_raw.docx", local_corrected_path)
         else:
             print("No replacements made.")
         return local_corrected_path
 
-    elif file_extension == 'txt':
-        lines = read_txt_file(local_download_path)
+    elif file_extension == '.txt':
+        lines = read_txt_file(downloaded_filename)
         corrected_lines = []
 
         for line in lines:
@@ -80,12 +87,27 @@ def correct_document_from_url(document_url):
             else:
                 corrected_lines.append('\n')
 
-        local_corrected_path = f"{local_download_base_path}_corrected.txt"
+        local_corrected_path = os.path.splitext(downloaded_filename)[0] + "_corrected.txt"
         write_txt_file(local_corrected_path, corrected_lines)
         return local_corrected_path
 
+    corrected_file_url = upload_to_firebase(local_corrected_path, user_id)
+    if file_extension == '.docx':
+        formatted_file_url = upload_to_firebase(os.path.splitext(downloaded_filename)[0] + "_formatted.docx", user_id)
     else:
-        print("Unsupported file format")
+        formatted_file_url = None  # For non-docx files, there's no separate formatted file
+
+    return corrected_file_url, formatted_file_url
+
+
+def upload_to_firebase(file_path, user_id):
+    try:
+        bucket = storage.bucket()
+        blob = bucket.blob(f"user_files/{user_id}/{os.path.basename(file_path)}")
+        blob.upload_from_filename(file_path)
+        return blob.public_url
+    except Exception as e:
+        print(f"Failed to upload file to Firebase: {e}")
         return None
 
 
