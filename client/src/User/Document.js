@@ -6,6 +6,8 @@ import { getStorage, ref as storageRef, uploadBytes, getDownloadURL, deleteObjec
 import { doc, setDoc, getFirestore, deleteDoc } from "firebase/firestore";
 import { collection, query, getDocs } from "firebase/firestore";
 import { useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUpload, faDownload, faTrashAlt, faEdit } from '@fortawesome/free-solid-svg-icons';
 
 import '../App.css'
 
@@ -167,24 +169,24 @@ function Document() {
 
       <div className='userDocumentSection'>
 
-        <div className='userDocumentCard'>
+      <div className='userDocumentCard'>
           <h3>Upload</h3>
           <div>
             <input
               type="file"
               onChange={handleFileChange}
-              style={{ display: 'none' }} // Hide the default input
-              id="file-upload" // Refer to this id when triggering click event
+              style={{ display: 'none' }}
+              id="file-upload"
             />
-            <button
-              onClick={() => document.getElementById('file-upload').click()} // Trigger file input click on button click
-            >
-              Choose File
+            <button onClick={() => document.getElementById('file-upload').click()} className="upload-btn">
+              <FontAwesomeIcon icon={faUpload} /> Choose File
             </button>
             {selectedFile && (
               <>
                 <span>{selectedFile.name}</span>
-                <button onClick={handleFileUpload}>Upload File</button>
+                <button onClick={handleFileUpload} className="upload-btn">
+                  <FontAwesomeIcon icon={faUpload} /> Upload File
+                </button>
                 <progress value={uploadProgress} max="100"></progress>
               </>
             )}
@@ -192,23 +194,27 @@ function Document() {
         </div>
 
         {documents.map((doc, index) => (
-            <div key={index} className='userDocumentCard' onClick={() => handleCardClick(doc)}>
-                <h3>{doc.name}</h3>
-                <p>Document description or content preview...</p>
-                <a href={doc.url} onClick={(e) => e.stopPropagation()} target="_blank" rel="noopener noreferrer">Download</a>
-                <button onClick={(e) => deleteFile(e, doc.name)}>Delete</button>
-                <button onClick={(e) => correctDocument(e, doc)}>Correct Text</button>
-                {correctingDocName === doc.name && <div>Correcting...</div>} {/* Show only for the correcting document */}
-            </div>
+          <div key={index} className='userDocumentCard' onClick={() => handleCardClick(doc)}>
+            <h3>{doc.name}</h3>
+            <p>Document description or content preview...</p>
+            <button onClick={(e) => {e.stopPropagation(); window.open(doc.url, '_blank')}} className="download-btn">
+            <FontAwesomeIcon icon={faDownload} /> Download
+            </button>
+            <button onClick={(e) => deleteFile(e, doc.name)} className="delete-btn">
+              <FontAwesomeIcon icon={faTrashAlt} /> Delete
+            </button>
+            <button onClick={(e) => correctDocument(e, doc)} className="edit-btn">
+              <FontAwesomeIcon icon={faEdit} /> Correct Text
+            </button>
+            {correctingDocName === doc.name && <div>Correcting...</div>}
+          </div>
         ))}
 
-
       </div>
-
     </div>
-
   );
 };
+
 export default Document;
 
 

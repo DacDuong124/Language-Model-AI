@@ -464,33 +464,27 @@ input:-webkit-autofill:active {
 .userDocumentBackGround {
     background-color: #f6f7cd;
     height: 100vh;     /* Sets the height to the full viewport height */
-    padding: 20px; 
-
+    padding: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Improved typography */
 }
 
-.userDocumentSection{
-    padding: 20px; 
+.userDocumentSection {
+    padding: 20px;
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;     /* Adjust the space between the cards as needed */
-    justify-content: left;     /* Center the cards in the container */
+    gap: 20px;
+    justify-content: left;
 }
 
 .userDocumentCard {
     background: white;
-    width: 220px;
-    /* Adjust width as needed */
+    width: 240px; /* Adjusted width for better layout */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    /* Soft shadow for depth */
     border-radius: 10px;
-    /* Rounded corners */
     padding: 20px;
-    /* Space inside the card */
     margin-bottom: 20px;
-    /* Space between cards vertically */
-    transition: transform 0.2s;
-    /* Smooth transition for hover effect */
-
+    transition: transform 0.2s, box-shadow 0.2s; /* Smooth transition for hover effect and shadow */
+    position: relative; /* For absolute positioning of icons */
 }
 
 .userDocumentCard:hover{
@@ -499,13 +493,93 @@ input:-webkit-autofill:active {
 }
 
 .userDocumentCard h3 {
-    margin: 0;
-    color: #333; /* Dark grey color for the title */
-    font-size: 1.2em; /* Slightly larger font size for the title */
+    margin: 0 0 10px 0;
+    color: #333;
+    font-size: 1.2em;
+}
+  
+.userDocumentCard p {
+    color: #666;
+    font-size: 1em;
+    line-height: 1.5;
+    margin-bottom: 15px; 
+}
+
+.userDocumentCard a, .userDocumentCard button {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Space between icon and text */
+    text-decoration: none;
+    color: inherit; /* Keeps the link color consistent with the card */
+    font-weight: bold; /* Makes the text bold */
+}
+
+.userDocumentCard button {
+    background: #eceff1; /* Light grey background */
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px; /* Rounded edges for buttons */
+    cursor: pointer; /* Changes the cursor on hover */
+    transition: background-color 0.2s; /* Smooth background color transition */
+}
+
+.userDocumentCard button:hover {
+    background-color: #e0e0e0; /* Slightly darker on hover */
+}
+
+/* Icon styles */
+.icon {
+    font-size: 1.2em; 
+}
+
+
+progress {
+    width: 100%;
+    height: 5px;
+    color: #4caf50; 
+    border-radius: 3px; 
+}
+progress::-webkit-progress-bar {
+    background-color: #e0e0e0; 
+}
+progress::-webkit-progress-value {
+    background-color: #4caf50; 
+}
+
+.upload-btn, .delete-btn, .edit-btn, .download-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px; 
   }
   
-  .userDocumentCard p {
-    color: #666; /* Grey color for the description */
+  .userDocumentCard .fa-icon {
     font-size: 1em;
-    line-height: 1.5; /* Spacing between lines */
+  }
+  
+  .upload-btn:hover, .delete-btn:hover, .edit-btn:hover {
+    background-color: #e0e0e0; 
+  }
+  
+
+  /* .download-link:hover {
+    text-decoration: underline; 
+    color: #0056b3;
+  } */
+
+  .download-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px; 
+    background-color: #eceff1;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px; 
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .download-btn:hover {
+    background-color: #d0d0d0; 
   }
