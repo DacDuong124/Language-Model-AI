@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFile, faTrash, faUser, faStar, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { faFile, faTrash, faUser, faStar, faSignOutAlt, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import './sidebar.css'; // Import your styles
 // import axios from "axios";
 
@@ -71,53 +71,60 @@ const Sidebar = () => {
   return (
     <div className="container-fluid">
       <div className="w3-sidebar w3-bar-block w3-card w3-animate-left" id="mySidebar">
-        
+
         {/* Heading */}
         <button className="w3-bar-item w3-button w3-large" onClick={w3Close}>Close &times;</button>
-  
+
         <h2>Language Sculptor</h2>
 
-      <nav>
-        <ul>
-          <li>
-            <Link to="/document">
-              <FontAwesomeIcon icon={faFile} className="fa-icon" /> My documents
-            </Link>
-          </li>
-          <li>
-            <Link to="/trash">
-              <FontAwesomeIcon icon={faTrash} className="fa-icon" /> Trash
-            </Link>
-          </li>
-          <li>
-            <Link to="/userprofile">
-              <FontAwesomeIcon icon={faUser} className="fa-icon" /> My Profile
-            </Link>
-          </li>
-          <li>
-            <Link to="/subscription">
-              <FontAwesomeIcon icon={faStar} className="fa-icon" /> Premium Subscription
-            </Link>
-          </li>
-        </ul>
-      </nav>
+        <nav>
+          <ul>
+            <li>
+              <Link to="/document">
+                <FontAwesomeIcon icon={faFile} className="fa-icon" /> My documents
+              </Link>
+            </li>
+            <li>
+              <Link to="/trash">
+                <FontAwesomeIcon icon={faTrash} className="fa-icon" /> Trash
+              </Link>
+            </li>
+            <li>
+              <Link to="/userprofile">
+                <FontAwesomeIcon icon={faUser} className="fa-icon" /> My Profile
+              </Link>
+            </li>
+            <li>
+              <Link to="/subscription">
+                <FontAwesomeIcon icon={faStar} className="fa-icon" /> Premium Subscription
+              </Link>
+            </li>
+          </ul>
+        </nav>
 
-      {/* Logout */}
-      <div className="sidebar-bottom">
-          <Link to="/" onClick={handleLogout} className="logout-link">
-            <FontAwesomeIcon icon={faSignOutAlt} className="fa-icon" />
-            Log Out
-          </Link>
-          {userData ? (
-            <div className="user-info">
-              <p>Email: {userData.email}</p>
-              {/* Additional user info can be displayed here */}
-            </div>
-          ) : (
-            <p>Loading user data...</p>
-          )}
+        {/* Logout */}
+        <div className="sidebar-bottom">
+          <ul>
+            <li>
+              <Link to="/" onClick={handleLogout} className="logout-link">
+                <FontAwesomeIcon icon={faSignOutAlt} className="fa-icon" />
+                Log Out
+              </Link>
+              </li>
+              <li>
+              {userData ? (
+                <div className="user-info">
+                  <FontAwesomeIcon icon={faEnvelope} className="fa-icon" />
+                  {userData.email}
+                  {/* Additional user info can be displayed here */}
+                </div>
+              ) : (
+                <p>Loading user data...</p>
+              )}
+            </li>
+          </ul>
+        </div>
       </div>
-    </div>
 
 
       <div id='main'>
