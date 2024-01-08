@@ -4,10 +4,7 @@ from urllib.parse import quote, urlencode, urlparse
 import time
 import os
 import shutil
-import firebase_admin
-from firebase_admin import credentials
-from firebase_admin import storage
-from firebase_admin import credentials, auth, firestore
+from firebase_admin import credentials, auth, firestore, storage
 from google.cloud import storage
 
 # Configure Firebase Admin SDK
@@ -48,10 +45,9 @@ def correct_document_from_url(document_url, user_id):
     if not downloaded_filename:
         return None  # Exit if the download fails
 
-    # Extract the file extension
+    local_corrected_path = None
     file_extension = os.path.splitext(downloaded_filename)[1].lower()
 
-    # Process the document based on its file type
     if file_extension == '.docx':
         doc = Document(downloaded_filename)
         replace_list = {}
@@ -59,58 +55,86 @@ def correct_document_from_url(document_url, user_id):
         for paragraph in doc.paragraphs:
             if str(paragraph.text).strip():
                 target = paragraph.text.strip()
-                answer = call(target)
+                answer = call(target)  # Assuming 'call' is defined elsewhere
                 if answer:
                     replace_list[target] = answer
 
-        # Apply the replacements to the document
         if replace_list:
+            # Assuming 'change_sentences' and 'change_format' are defined elsewhere
             change_sentences(replace_list, downloaded_filename.rstrip(file_extension))
             change_format(downloaded_filename.rstrip(file_extension), downloaded_filename.rstrip(file_extension) + "_raw")
 
-            # Define the corrected path
             local_corrected_path = os.path.splitext(downloaded_filename)[0] + "_corrected.docx"
-            # Save the corrected document
             shutil.move(downloaded_filename.rstrip(file_extension) + "_raw.docx", local_corrected_path)
         else:
             print("No replacements made.")
-        return local_corrected_path
 
     elif file_extension == '.txt':
+        # Assuming 'read_txt_file' and 'write_txt_file' are defined elsewhere
         lines = read_txt_file(downloaded_filename)
         corrected_lines = []
 
         for line in lines:
             if line.strip():
-                corrected_line = call(line.strip())
+                corrected_line = call(line.strip())  # Assuming 'call' is defined elsewhere
                 corrected_lines.append(corrected_line + '\n' if corrected_line else line)
             else:
                 corrected_lines.append('\n')
 
         local_corrected_path = os.path.splitext(downloaded_filename)[0] + "_corrected.txt"
         write_txt_file(local_corrected_path, corrected_lines)
-        return local_corrected_path
 
-    corrected_file_url = upload_to_firebase(local_corrected_path, user_id)
-    if file_extension == '.docx':
-        formatted_file_url = upload_to_firebase(os.path.splitext(downloaded_filename)[0] + "_formatted.docx", user_id)
+    if local_corrected_path:
+        corrected_file_url = upload_to_firebase(local_corrected_path, user_id)
+        if corrected_file_url:
+            corrected_file_name = os.path.basename(local_corrected_path)
+            add_file_url_to_firestore(corrected_file_url, corrected_file_name, user_id)
+        else:
+            print("Failed to upload corrected file to Firebase Storage")
+
+        if file_extension == '.docx':
+            formatted_file_url = upload_to_firebase(os.path.splitext(downloaded_filename)[0] + "_formatted.docx", user_id)
+        else:
+            formatted_file_url = None
+
+        return corrected_file_url, formatted_file_url
     else:
-        formatted_file_url = None  # For non-docx files, there's no separate formatted file
+        print("No corrected file to upload.")
+        return None
 
-    return corrected_file_url, formatted_file_url
-
-
+# Initialize a storage client
+storage_client = storage.Client()
+# Get the bucket from the storage client
+bucket = storage_client.get_bucket('language-ai-model.appspot.com')
 def upload_to_firebase(file_path, user_id):
     try:
-        bucket = storage.bucket()
-        blob = bucket.blob(f"user_files/{user_id}/{os.path.basename(file_path)}")
+        blob = bucket.blob(f'user_files/{user_id}/{file_path}')
+
+        # blob = bucket.blob(f"user_files/{user_id}/{os.path.basename(file_path)}")
         blob.upload_from_filename(file_path)
         return blob.public_url
     except Exception as e:
         print(f"Failed to upload file to Firebase: {e}")
         return None
 
+def add_file_url_to_firestore(file_url, file_name, user_id):
+    try:
+        # Initialize Firestore DB
+        db = firestore.client()
 
+        # Create a new document in the 'corrected_files' collection
+        file_data = {
+            'user_id': user_id,
+            'file_url': file_url,
+            'file_name': file_name,  # Include the file name
+            'timestamp': firestore.SERVER_TIMESTAMP
+        }
+        db.collection('corrected_files').add(file_data)
+        print("File URL added to Firestore successfully.")
+    except Exception as e:
+        print(f"Failed to add file URL to Firestore: {e}")
+
+        
 
 def call(prompt):
     prompt_questions = ["Correct this text: "]
