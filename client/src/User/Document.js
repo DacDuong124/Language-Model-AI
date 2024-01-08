@@ -137,30 +137,35 @@ function Document() {
   const correctDocument = async (e, doc) => {
     e.stopPropagation();
     setCorrectingDocName(doc.name); // Start the correction process
-  
+
     try {
-      const response = await fetch('http://localhost:3000/correct_document', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ documentUrl: doc.url }) // Send the document URL to the server
-      });
-  
-      const responseData = await response.json();
-      if (response.ok) {
-        alert('Document corrected successfully!');
-        // Update the document list or state here if necessary
-      } else {
-        alert(`Error: ${responseData.error}`);
-      }
+        const auth = getAuth();
+        const token = await auth.currentUser.getIdToken(); // Retrieve Firebase token
+
+        const response = await fetch('http://localhost:3000/correct_document', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` // Include the token in the Authorization header
+            },
+            body: JSON.stringify({ documentUrl: doc.url }) // Send the document URL to the server
+        });
+
+        const responseData = await response.json();
+        if (response.ok) {
+            alert('Document corrected successfully!');
+            // Update the document list or state here if necessary
+        } else {
+            alert(`Error: ${responseData.error}`);
+        }
     } catch (error) {
-      console.error('Correction request failed:', error);
-      alert('Correction request failed');
+        console.error('Correction request failed:', error);
+        alert('Correction request failed');
     }
-  
+
     setCorrectingDocName(null); // End the correction process
-  };
+};
+
   
 
   return (

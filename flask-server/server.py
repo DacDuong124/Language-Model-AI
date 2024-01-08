@@ -153,6 +153,7 @@ def profile():
         return jsonify({"error": "Invalid or expired token"}), 401
 
     user_uid = decoded_token['uid']
+    print(user_uid)
 
     if request.method == 'GET':
         try:
@@ -286,12 +287,22 @@ def delete_account():
     
 @app.route("/correct_document", methods=["POST"])
 def correct_document():
+    # Extract the token from the Authorization header
+    token = request.headers.get('Authorization', '').split('Bearer ')[-1]
+    decoded_token = verify_firebase_token(token)
+
+    if not decoded_token:
+        return jsonify({"error": "Invalid or expired token"}), 401
+
+    user_uid = decoded_token['uid']
+    print(user_uid)
     try:
         data = request.json
+        print(user_uid)
         document_url = data.get('documentUrl')
         
-        corrected_file_path = text_correction.correct_document_from_url(document_url)
-        
+        corrected_file_path = text_correction.correct_document_from_url(document_url, user_uid)
+        print(corrected_file_path)
         if corrected_file_path:
             # Handle the corrected file, such as sending it back or storing it
             return jsonify({"message": "Document corrected successfully", "correctedFilePath": corrected_file_path})
