@@ -1,6 +1,6 @@
 import requests
 from docx import Document
-from urllib.parse import quote, urlencode, urlparse
+from urllib.parse import quote, urlencode, urlparse, unquote
 import time
 import os
 import shutil
@@ -17,18 +17,22 @@ def custom_urlencode(params):
 def left_whitespaces_counter(string):
     return len(string) - len(str(string).lstrip())
 
+
 def download_document(url):
     try:
-        response = requests.get(url)
-        response.raise_for_status()
+        # Decode the URL
+        decoded_url = unquote(url)
 
-        # Extracting the filename from the URL
-        parsed_url = urlparse(url)
+        # Extracting the filename from the decoded URL
+        parsed_url = urlparse(decoded_url)
         filename = os.path.basename(parsed_url.path)
 
         # Check if the URL contains a valid filename
         if not filename:
             raise ValueError("URL does not contain a valid filename")
+
+        response = requests.get(url)
+        response.raise_for_status()
 
         with open(filename, 'wb') as f:
             f.write(response.content)
@@ -36,8 +40,6 @@ def download_document(url):
     except Exception as e:
         print(f"Failed to download document: {e}")
         return None
-
-
 
 def correct_document_from_url(document_url, user_id):
     # Download the document and get the filename
@@ -102,6 +104,7 @@ def correct_document_from_url(document_url, user_id):
         print("No corrected file to upload.")
         return None
 
+
 # Initialize a storage client
 storage_client = storage.Client()
 # Get the bucket from the storage client
@@ -117,24 +120,32 @@ def upload_to_firebase(file_path, user_id):
         print(f"Failed to upload file to Firebase: {e}")
         return None
 
+
 def add_file_url_to_firestore(file_url, file_name, user_id):
     try:
         # Initialize Firestore DB
         db = firestore.client()
 
-        # Create a new document in the 'corrected_files' collection
+        # Create a new document in the user's 'documents' subcollection
         file_data = {
             'user_id': user_id,
-            'file_url': file_url,
-            'file_name': file_name,  # Include the file name
-            'timestamp': firestore.SERVER_TIMESTAMP
+            'url': file_url,  # URL of the corrected file
+            'name': file_name,  # Include the file name
+            'createdAt': firestore.SERVER_TIMESTAMP  # Use a timestamp to track when the file was added
         }
-        db.collection('corrected_files').add(file_data)
-        print("File URL added to Firestore successfully.")
+        # Add the document to the 'documents' subcollection of the specific user
+        # db.collection('users').document(user_id).collection('documents').add(file_data)
+        doc_ref = db.collection('users').document(user_id).collection('documents').document(file_name)
+        doc_ref.set(file_data)
+        print("Corrected file URL added to Firestore in the user's 'documents' subcollection successfully.")
     except Exception as e:
-        print(f"Failed to add file URL to Firestore: {e}")
+        print(f"Failed to add corrected file URL to Firestore: {e}")
 
-        
+
+
+
+
+
 
 def call(prompt):
     prompt_questions = ["Correct this text: "]
