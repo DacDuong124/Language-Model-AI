@@ -87,6 +87,7 @@ def correct_document_from_url(document_url, user_id):
         write_txt_file(local_corrected_path, corrected_lines)
 
     if local_corrected_path:
+        # Upload the corrected file
         corrected_file_url = upload_to_firebase(local_corrected_path, user_id)
         if corrected_file_url:
             corrected_file_name = os.path.basename(local_corrected_path)
@@ -94,12 +95,17 @@ def correct_document_from_url(document_url, user_id):
         else:
             print("Failed to upload corrected file to Firebase Storage")
 
+        # Check if there is a formatted file for .docx, and upload it
         if file_extension == '.docx':
-            formatted_file_url = upload_to_firebase(os.path.splitext(downloaded_filename)[0] + "_formatted.docx", user_id)
-        else:
-            formatted_file_url = None
+            formatted_file_path = os.path.splitext(downloaded_filename)[0] + "_formatted.docx"
+            formatted_file_url = upload_to_firebase(formatted_file_path, user_id)
+            if formatted_file_url:
+                formatted_file_name = os.path.basename(formatted_file_path)
+                add_file_url_to_firestore(formatted_file_url, formatted_file_name, user_id)
+            else:
+                print("Failed to upload formatted file to Firebase Storage")
 
-        return corrected_file_url, formatted_file_url
+        return corrected_file_url, formatted_file_url  # Return both URLs
     else:
         print("No corrected file to upload.")
         return None
@@ -111,10 +117,16 @@ storage_client = storage.Client()
 bucket = storage_client.get_bucket('language-ai-model.appspot.com')
 def upload_to_firebase(file_path, user_id):
     try:
-        blob = bucket.blob(f'user_files/{user_id}/{file_path}')
+        # Create a blob in the specific user's folder
+        blob = bucket.blob(f'user_files/{user_id}/{os.path.basename(file_path)}')
 
-        # blob = bucket.blob(f"user_files/{user_id}/{os.path.basename(file_path)}")
+        # Upload the file
         blob.upload_from_filename(file_path)
+
+        # Make the blob publicly accessible (if your policy allows this)
+        blob.make_public()
+
+        # Return the public URL for the file
         return blob.public_url
     except Exception as e:
         print(f"Failed to upload file to Firebase: {e}")
