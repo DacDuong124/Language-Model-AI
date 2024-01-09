@@ -52,8 +52,8 @@ const Sidebar = () => {
   };
 
   const w3Open = () => {
-    document.getElementById("main").style.marginLeft = "20%";
-    document.getElementById("mySidebar").style.width = "20%";
+    document.getElementById("main").style.marginLeft = "15%";
+    document.getElementById("mySidebar").style.width = "15%";
     document.getElementById("mySidebar").style.display = "block";
     document.getElementById("openNav").style.display = 'none';
   }
@@ -69,16 +69,16 @@ const Sidebar = () => {
   }, []); // Empty dependency array means this effect runs once after initial render
 
 return (
-  <div className="container-fluid">
-    <div className="w3-sidebar w3-bar-block w3-card w3-animate-left" id="mySidebar">
+  <div>
+    <div className="sidebar bar-block card animate-left" id="mySidebar">
       <h2>Language Sculptor</h2>
       
-      <button className="w3-bar-item w3-button w3-large" onClick={w3Close}>Close &times;</button>
+      <button className="bar-item button large" onClick={w3Close}>Close &times;</button>
       <nav>
         <ul>
           <li>
             <Link to="/document">
-              <FontAwesomeIcon icon={faFile} className="fa-icon" /> My documents
+              <FontAwesomeIcon icon={faFile} className="fa-icon" /> My Documents
             </Link>
           </li>
           <li>
@@ -118,9 +118,8 @@ return (
         <button id="openNav" className="w3-button w3-teal w3-xlarge" onClick={w3Open}>&#9776;</button>
         <Outlet />
       </div>
-
-    </div>
-
+  </div>
+    
   );
 };
 

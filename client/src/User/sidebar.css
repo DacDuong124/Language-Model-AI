@@ -1,66 +1,21 @@
-/* Sidebar.css */
-.sidebar {
-  width: 250px;
-  height: 100%;
-  background-color: #f4f4f4; 
-  color: #333;
-  padding: 20px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-/* Title */
-.sidebar h2 {
-  margin-bottom: 25px;
-}
-
-/* Logout */
-.sidebar h3 {
-  margin-top: 55px;
-}
-
-.sidebar nav ul {
-  list-style: none;
-  padding: 0;
-}
-
-.sidebar nav li {
-  margin-bottom: 10px;
-}
-
-.sidebar nav a {
-  color: white;
-  text-decoration: none;
-  font-size: larger;
-}
-
-/* Layout.css */
-.layout {
-  display: flex;
-}
-
-.content {
-  flex: 1;
-  padding: 20px;
-}
-
 /* W3 Stuffs down here */
 
-.w3-sidebar {
+.sidebar {
   height: 100%;
   width: fit-content;
-  background-color: #fff;
+  background-color: #365486;
   position: fixed !important;
   z-index: 1;
   overflow: auto;
   padding: 20px;
 }
 
-.w3-card,
-.w3-card-2 {
+.card,
+.card-2 {
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12)
 }
 
-.w3-animate-left {
+.animate-left {
   position: relative;
   animation: animateleft 0.4s
 }
@@ -77,7 +32,7 @@
   }
 }
 
-.w3-bar .w3-bar-item {
+.bar .bar-item {
   padding: 8px 16px;
   float: left;
   width: auto;
@@ -86,8 +41,8 @@
   outline: 0
 }
 
-.w3-btn,
-.w3-button {
+.btn,
+.button {
   border: none;
   display: inline-block;
   padding: 8px 16px;
@@ -101,7 +56,7 @@
   white-space: nowrap
 }
 
-.w3-large {
+.large {
   font-size: 18px !important
 }
 
