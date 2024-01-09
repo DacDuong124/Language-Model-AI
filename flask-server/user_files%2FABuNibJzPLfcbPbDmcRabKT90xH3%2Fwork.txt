@@ -1,0 +1,24 @@
+*Technology Description Leader
+Responsible for detailing the technologies to be implemented.
+Focuses on functionalities, acquisition methods, integration into existing systems, and whether they are completely new or add-ons.
+Requires a strong understanding of technology and its application in business contexts.
+Organizational Resources Coordinator
+
+*Focuses on the description of organizational resources such as budget, manpower, and relationships.
+Determines how proposed solutions align with and complement current market offerings.
+Needs skills in resource management and strategic planning.
+Implementation Strategy and Issues Analyst
+
+*Identifies potential issues during implementation and proposes solutions.
+Decides on the project management approach (e.g., waterfall vs. agile).
+Requires analytical skills and experience in project management.
+Leadership and Time Frame Planner
+
+*Determines the leadership styles to be employed for various purposes.
+Plans and outlines an estimated time frame for implementation.
+Needs leadership skills and experience in team management.
+Effectiveness and Business Model Change Evaluator
+
+*Develops criteria for measuring the success and effectiveness of the implementation.
+Analyzes the changes in the business model and processes post-implementation.
+Requires skills in evaluation, analytics, and a deep understanding of business models.
