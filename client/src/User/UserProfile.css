@@ -1,65 +1,75 @@
 /* General Styles */
 body {
-    background-color: #f6f7cd; /* Set the background color for the whole page */
-    font-family: 'Arial', sans-serif; /* Use a clean and readable font */
+    background-color: #f6f7cd;
+    font-family: 'Arial', sans-serif;
+    color: #333; /* Uniform text color */
+    line-height: 1.6; /* Improved line spacing for readability */
 }
 
-/* USER PROFILE */
-.userProfileTitle {
-    /* border-bottom: 2px solid #333; 
-    margin-bottom: 20px;
-    padding: 10px;
-    text-align: center; 
-    font-size: 24px; 
-    color: #333;  */
-}
-
+/* User Profile Container */
 .userProfileContainer {
-    padding: 20px;
-    background-color: #ffffff; 
-    margin: auto;
-    width: 80%; 
-    border-radius: 15px; 
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
-    color: #333; 
+    padding: 40px;
+    background-color: #ffffff;
+    margin: 30px auto;
+    width: 60%; /* More centered and suitable for readability */
+    border-radius: 20px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); /* Softer shadow for depth */
+    color: #333;
 }
 
 /* Form Styles */
 form {
     display: flex;
     flex-direction: column;
-    gap: 15px; 
+    gap: 20px;
 }
 
 input, .MuiButton-root {
-    font-size: 16px; 
+    font-size: 18px; /* Slightly larger font size */
+    border: 1px solid #ddd; /* Subtle border for inputs */
+    padding: 12px 20px; /* More padding for comfort */
+    border-radius: 8px; /* Rounded corners for inputs */
 }
 
 .MuiButton-root {
-    margin-top: 10px;
-    padding: 10px 15px; 
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer; /* Cursor indication for buttons */
+    transition: background-color 0.3s; /* Smooth transition for button hover */
+}
+
+/* Button Hover Effect */
+.MuiButton-root:hover {
+    background-color: #e0e0e0; /* Lighter shade on hover */
 }
 
 /* Error Messages */
 p {
-    color: red; 
-    margin-top: -10px;
-    margin-bottom: 10px;
+    /* color: #ff4d4d; 
+    margin-top: -5px;
+    margin-bottom: 15px; */
 }
 
 /* Buttons */
-.ColorButton, .ColorButtonDelete {
-    width: 100%; 
-    font-weight: bold; 
+.ColorButton {
+    background-color: #007bff; /* Primary color for main action */
+    color: white;
+}
+
+.ColorButtonDelete {
+    background-color: #dc3545; /* Danger color for delete actions */
+    color: white;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
     .userProfileContainer {
-        width: 95%; 
+        width: 95%;
+        padding: 20px;
     }
 
-    form {
-        flex-direction: column;
+    input, .MuiButton-root {
+        font-size: 16px;
     }
 }
