@@ -7,6 +7,7 @@ import moment from 'moment';
 
 import './sidebar.css'; // Import your styles
 import '../App.css'
+import './UserProfile.css';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
@@ -26,6 +27,7 @@ const UserProfile = () => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
+  const [jobInfo, setJobInfo] = useState('');
 
   // Function to fetch user data
   useEffect(() => {
@@ -194,7 +196,7 @@ const UserProfile = () => {
 
     <div >
       <div className='userProfileTitle'>
-        <h1>User Profile</h1>
+        <h1></h1>
       </div>
 
       <div className='userProfileContainer'>

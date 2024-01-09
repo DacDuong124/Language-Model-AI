@@ -1,0 +1,65 @@
+/* General Styles */
+body {
+    background-color: #f6f7cd; /* Set the background color for the whole page */
+    font-family: 'Arial', sans-serif; /* Use a clean and readable font */
+}
+
+/* USER PROFILE */
+.userProfileTitle {
+    /* border-bottom: 2px solid #333; 
+    margin-bottom: 20px;
+    padding: 10px;
+    text-align: center; 
+    font-size: 24px; 
+    color: #333;  */
+}
+
+.userProfileContainer {
+    padding: 20px;
+    background-color: #ffffff; 
+    margin: auto;
+    width: 80%; 
+    border-radius: 15px; 
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
+    color: #333; 
+}
+
+/* Form Styles */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; 
+}
+
+input, .MuiButton-root {
+    font-size: 16px; 
+}
+
+.MuiButton-root {
+    margin-top: 10px;
+    padding: 10px 15px; 
+}
+
+/* Error Messages */
+p {
+    color: red; 
+    margin-top: -10px;
+    margin-bottom: 10px;
+}
+
+/* Buttons */
+.ColorButton, .ColorButtonDelete {
+    width: 100%; 
+    font-weight: bold; 
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .userProfileContainer {
+        width: 95%; 
+    }
+
+    form {
+        flex-direction: column;
+    }
+}
