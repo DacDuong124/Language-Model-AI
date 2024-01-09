@@ -31,7 +31,7 @@ def generate_code():
             return jsonify({"error": "No prompts provided"}), 400
 
         # Define the API endpoint
-        api_url = "https://3c92-103-253-89-37.ngrok-free.app/generate_code"
+        api_url = "https://polite-horribly-cub.ngrok-free.app/generate_code"
 
         # Send the GET request with the prompts
         response = requests.get(api_url, params=[("prompts", prompt) for prompt in prompts])

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 // import axios from "axios";
 // import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
@@ -12,6 +12,7 @@ function ViewDocument() {
   });
   const [generatedCodeList, setGeneratedCodeList] = useState([]);
   const [error, setError] = useState('');
+  const [fileContent, setFileContent] = useState('');
 
   const handleGenerateCode = async () => {
     try {
@@ -40,6 +41,14 @@ function ViewDocument() {
       setError("An error occurred while generating code");
     }
   };
+  useEffect(() => {
+    if (document && document.url && document.name.endsWith('.txt')) {
+      fetch(document.url)
+        .then(response => response.text())
+        .then(text => setFileContent(text))
+        .catch(error => console.error('Error fetching text file:', error));
+    }
+  }, [document]);
 
   const handleInputChange = (e) => {
     setInputPrompt({ input: e.target.value });
@@ -50,20 +59,13 @@ function ViewDocument() {
 
       <label>
         <h1>Enter Prompt:</h1>
-        {/* <input
-          style={{ width: `${inputPrompt.input.length * 8}px` }}
-
-          type="text"
-          value={inputPrompt.input}
-          onChange={handleInputChange}
-        /> */}
         <Box
           sx={{
             width: 500,
             maxWidth: '100%',
           }}
         >
-          <h3>What do want the AI to do ?</h3>
+          <h3>Enter a sentence you want to correct</h3>
           <textarea style={{ fontSize: '15px' }}
             cols="80"
             rows="10"
@@ -87,43 +89,24 @@ function ViewDocument() {
           ))}
         </div>
       )}
+      <div>
+        <h2>Document Content</h2>
+        <pre>{fileContent}</pre>
+      </div>
+      <div>
+      <div>
+      {document && document.name.endsWith('.docx') && (
+        <iframe 
+          src={`https://docs.google.com/gview?url=${encodeURIComponent(document.url)}&embedded=true`} 
+          style={{ width: "100%", height: "500px", border: "none" }} // CSS styling here
+          title="Document Viewer"
+        ></iframe>
+      )}
+    </div>
+</div>
 
-      {/* <nav className="navbar navbar-inverse visible-xs">
-        <div className="container-fluid">
-          <div className="navbar-header">
-            <button type="button" className="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-              <span className="icon-bar"></span>
-              <span className="icon-bar"></span>
-              <span className="icon-bar"></span>
-            </button>
-            <a className="navbar-brand" href="#">Logo</a>
-          </div>
-          <div className="collapse navbar-collapse" id="myNavbar">
-            <ul className="nav navbar-nav">
-              <li className="active"><a href="#">Dashboard</a></li>
-              <li><a href="#">Age</a></li>
-              <li><a href="#">Gender</a></li>
-              <li><a href="#">Geo</a></li>
-            </ul>
-          </div>
-        </div>
-      </nav> */}
     </div>
 
   );
 };
 export default ViewDocument;
-
-// Home.js
-// import React from 'react';
-
-// const Document = () => {
-//   return (
-//     <div>
-//       <h2>Welcome to the Home Page!</h2>
-//       {/* Add your home page content here */}
-//     </div>
-//   );
-// };
-
-// export default Document;
