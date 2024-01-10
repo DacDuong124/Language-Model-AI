@@ -142,7 +142,8 @@ def add_file_url_to_firestore(file_url, file_name, user_id):
         file_data = {
             'user_id': user_id,
             'url': file_url,  # URL of the corrected file
-            'name': file_name,  # Include the file name
+            'name': file_name, # Include the file name
+            'status': 'active',  
             'createdAt': firestore.SERVER_TIMESTAMP  # Use a timestamp to track when the file was added
         }
         # Add the document to the 'documents' subcollection of the specific user
