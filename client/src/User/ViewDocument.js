@@ -57,7 +57,7 @@ function ViewDocument() {
   return (
     <div>
 
-      <label>
+      {/* <label>
         <h1>Enter Prompt:</h1>
         <Box
           sx={{
@@ -88,7 +88,7 @@ function ViewDocument() {
             <pre style={{ fontSize: '18px' }} key={index}>{code}</pre>
           ))}
         </div>
-      )}
+      )} */}
       <div>
         <h2>Document Content</h2>
         <pre>{fileContent}</pre>
@@ -98,7 +98,7 @@ function ViewDocument() {
       {document && document.name.endsWith('.docx') && (
         <iframe 
           src={`https://docs.google.com/gview?url=${encodeURIComponent(document.url)}&embedded=true`} 
-          style={{ width: "100%", height: "500px", border: "none" }} // CSS styling here
+          style={{ width: "100%", height: "1000px", border: "none" }} // CSS styling here
           title="Document Viewer"
         ></iframe>
       )}

@@ -44,6 +44,8 @@ function Document() {
   const handleFileUpload = async () => {
     if (selectedFile && user) {
       const storage = getStorage();
+      // Use the user's UID as the userID field
+      const userID = user.uid;
       const fileRef = storageRef(storage, `user_files/${user.uid}/${selectedFile.name}`);
 
       try {
@@ -53,7 +55,10 @@ function Document() {
         const documentData = {
           name: selectedFile.name,
           url: downloadURL,
-          createdAt: new Date()
+          createdAt: new Date(),
+          status: 'active', // Include the status field here
+          user_id: userID // Add the userID field
+
         };
 
         await setDoc(doc(firestore, `users/${user.uid}/documents`, selectedFile.name), documentData);
@@ -96,7 +101,9 @@ function Document() {
     // Function to fetch documents
     const fetchDocuments = async () => {
       if (user) {
-        const q = query(collection(firestore, `users/${user.uid}/documents`));
+        // const q = query(collection(firestore, `users/${user.uid}/documents`));
+        const q = query(collection(firestore, `users/${user.uid}/documents`), where("status", "==", "active"));
+
         try {
           const querySnapshot = await getDocs(q);
           const docs = [];
@@ -110,21 +117,6 @@ function Document() {
       }
     };
 
-    // const fetchCorrectedFiles = async () => {
-    //   if (user) {
-    //     const q = query(collection(firestore, 'corrected_files'), where('user_id', '==', user.uid));
-    //     try {
-    //       const querySnapshot = await getDocs(q);
-    //       const files = [];
-    //       querySnapshot.forEach((doc) => {
-    //         files.push(doc.data());
-    //       });
-    //       setCorrectedFiles(files);
-    //     } catch (error) {
-    //       console.error('Error fetching corrected files:', error);
-    //     }
-    //   }
-    // };
 
 
     // Use useEffect to fetch documents when the component mounts or user changes
@@ -133,6 +125,8 @@ function Document() {
     // Cleanup subscription on unmount
     return () => unsubscribe();
   }, [user, firestore]);
+
+
 
   // const deleteFile = async (e, fileName) => {
   //   e.stopPropagation();
@@ -144,12 +138,13 @@ function Document() {
   //     await deleteObject(fileRef);
 
   //     // Delete the document from Firestore
-  //     await deleteDoc(doc(firestore, `users/${user.uid}/documents`, fileName));
+  //     const firestoreRef = doc(firestore, `users/${user.uid}/documents`, fileName);
+  //     await deleteDoc(firestoreRef);
 
   //     // Update local state to reflect deletion
   //     setDocuments(documents.filter(doc => doc.name !== fileName));
 
-  //     alert('File deleted successfully');
+  //     alert('File and its record deleted successfully');
   //   } catch (error) {
   //     console.error('Error deleting file:', error);
   //     alert('Error deleting file');
@@ -161,24 +156,19 @@ function Document() {
     if (!user) return;
 
     try {
-      // Delete from Firebase Storage
-      const fileRef = storageRef(getStorage(), `user_files/${user.uid}/${fileName}`);
-      await deleteObject(fileRef);
-
-      // Delete the document from Firestore
+      // Update the document status to "trashed" in Firestore
       const firestoreRef = doc(firestore, `users/${user.uid}/documents`, fileName);
-      await deleteDoc(firestoreRef);
+      await setDoc(firestoreRef, { status: 'trashed' }, { merge: true });
 
-      // Update local state to reflect deletion
-      setDocuments(documents.filter(doc => doc.name !== fileName));
+      // Update local state to reflect the change
+      setDocuments(documents.map(doc => doc.name === fileName ? { ...doc, status: 'trashed' } : doc));
 
-      alert('File and its record deleted successfully');
+      alert('File moved to Recycle Bin successfully');
     } catch (error) {
-      console.error('Error deleting file:', error);
-      alert('Error deleting file');
+      console.error('Error moving file to trash:', error);
+      alert('Error moving file to trash');
     }
   };
-
 
 
   const correctDocument = async (e, doc) => {
@@ -212,6 +202,8 @@ function Document() {
 
     setCorrectingDocName(null); // End the correction process
   };
+
+
 
 
 
@@ -253,7 +245,7 @@ function Document() {
               <FontAwesomeIcon icon={faDownload} /> Download
             </button>
             <button onClick={(e) => deleteFile(e, doc.name)} className="delete-btn">
-              <FontAwesomeIcon icon={faTrashAlt} /> Delete
+              <FontAwesomeIcon icon={faTrashAlt} /> Move to Recycle Bin
             </button>
             <button onClick={(e) => correctDocument(e, doc)} className="edit-btn">
               <FontAwesomeIcon icon={faEdit} /> Correct Text
@@ -263,17 +255,7 @@ function Document() {
         ))}
         {/* Display corrected files */}
 
-{/* 
-        {correctedFiles.map((file, index) => (
-          <div key={index} className='userDocumentCard' onClick={() => handleCardClick(file)}>
-            <h3>{file.file_name}</h3> 
-            <p>Corrected document description or content preview...</p>
-            <a href={file.url} target="_blank" rel="noopener noreferrer">Download Corrected</a>
-          
-            <button onClick={(e) => deleteFile(e, doc.name)} className="delete-btn">
-              <FontAwesomeIcon icon={faTrashAlt} /> Delete
-            </button>
-          </div>))} */}
+
 
       </div>
     </div>

@@ -86,7 +86,7 @@ const Sidebar = () => {
             </li>
             <li>
               <Link to="/trash">
-                <FontAwesomeIcon icon={faTrash} className="fa-icon" /> Trash
+                <FontAwesomeIcon icon={faTrash} className="fa-icon" /> Recycle Bin
               </Link>
             </li>
             <li>
