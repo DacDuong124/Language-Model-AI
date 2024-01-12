@@ -6,7 +6,7 @@ import os
 import shutil
 from firebase_admin import credentials, auth, firestore, storage
 from google.cloud import storage
-
+BATCH_SIZE = 3
 # Configure Firebase Admin SDK
 cred = credentials.Certificate("language-ai-model-firebase-adminsdk-l4hgq-1c59e87bd8.json")
 
@@ -52,36 +52,52 @@ def correct_document_from_url(document_url, user_id):
 
     if file_extension == '.docx':
         doc = Document(downloaded_filename)
+        paragraphs_batch = []
         replace_list = {}
 
         for paragraph in doc.paragraphs:
-            if str(paragraph.text).strip():
-                target = paragraph.text.strip()
-                answer = call(target)  # Assuming 'call' is defined elsewhere
-                if answer:
-                    replace_list[target] = answer
+            text = paragraph.text.strip()
+            if text:
+                paragraphs_batch.append(text)
+
+                if len(paragraphs_batch) >= BATCH_SIZE:
+                    batch_replacements = call_batch(paragraphs_batch)
+                    if batch_replacements:
+                        replace_list.update(batch_replacements)
+                    paragraphs_batch = []
+
+        if paragraphs_batch:  # Process any remaining paragraphs
+            batch_replacements = call_batch(paragraphs_batch)
+            if batch_replacements:
+                replace_list.update(batch_replacements)
 
         if replace_list:
-            # Assuming 'change_sentences' and 'change_format' are defined elsewhere
             change_sentences(replace_list, downloaded_filename.rstrip(file_extension))
             change_format(downloaded_filename.rstrip(file_extension), downloaded_filename.rstrip(file_extension) + "_raw")
 
             local_corrected_path = os.path.splitext(downloaded_filename)[0] + "_corrected.docx"
             shutil.move(downloaded_filename.rstrip(file_extension) + "_raw.docx", local_corrected_path)
-        else:
-            print("No replacements made.")
 
     elif file_extension == '.txt':
-        # Assuming 'read_txt_file' and 'write_txt_file' are defined elsewhere
         lines = read_txt_file(downloaded_filename)
+        lines_batch = []
         corrected_lines = []
 
         for line in lines:
-            if line.strip():
-                corrected_line = call(line.strip())  # Assuming 'call' is defined elsewhere
-                corrected_lines.append(corrected_line + '\n' if corrected_line else line)
-            else:
-                corrected_lines.append('\n')
+            stripped_line = line.strip()
+            if stripped_line:
+                lines_batch.append(stripped_line)
+
+                if len(lines_batch) >= BATCH_SIZE:
+                    batch_replacements = call_batch(lines_batch)
+                    for original, corrected in zip(lines_batch, batch_replacements.values()):
+                        corrected_lines.append(corrected + '\n' if corrected else original + '\n')
+                    lines_batch = []
+
+        if lines_batch:  # Process any remaining lines
+            batch_replacements = call_batch(lines_batch)
+            for original, corrected in zip(lines_batch, batch_replacements.values()):
+                corrected_lines.append(corrected + '\n' if corrected else original + '\n')
 
         local_corrected_path = os.path.splitext(downloaded_filename)[0] + "_corrected.txt"
         write_txt_file(local_corrected_path, corrected_lines)
@@ -109,6 +125,40 @@ def correct_document_from_url(document_url, user_id):
     else:
         print("No corrected file to upload.")
         return None
+    
+def process_document(doc_name):
+    doc = Document(doc_name + ".docx")
+    paragraphs_batch = []
+    replace_list = {}
+
+    # Iterate through paragraphs and batch them
+    for paragraph in doc.paragraphs:
+        text = paragraph.text.strip()
+        if text:
+            paragraphs_batch.append(text)
+
+            # If batch size is reached, process the batch
+            if len(paragraphs_batch) >= BATCH_SIZE:
+                batch_replacements = call_batch(paragraphs_batch)
+                if batch_replacements:
+                    replace_list.update(batch_replacements)
+                paragraphs_batch = []  # Reset the batch for next set of paragraphs
+
+    # Process any remaining paragraphs in the final batch
+    if paragraphs_batch:
+        batch_replacements = call_batch(paragraphs_batch)
+        if batch_replacements:
+            replace_list.update(batch_replacements)
+
+    # Apply replacements to the document regardless of whether there are replacements
+    change_sentences(replace_list, doc_name.rstrip('.docx'))
+    change_format(doc_name.rstrip('.docx'), doc_name.rstrip('.docx') + "_raw")
+
+    # Move the corrected file to a new path
+    local_corrected_path = doc_name.rstrip('.docx') + "_corrected.docx"
+    shutil.move(doc_name.rstrip('.docx') + "_raw.docx", local_corrected_path)
+    return local_corrected_path
+
 
 
 # Initialize a storage client
@@ -160,14 +210,18 @@ def add_file_url_to_firestore(file_url, file_name, user_id):
 
 
 
-def call(prompt):
+def call_batch(paragraphs):
     prompt_questions = ["Correct this text: "]
-    additional_prompt = " Here is the corrected version"
+    additional_prompt = " Here are the corrected versions:"
 
-    input_prompt = str(prompt) + '.' if not str(prompt).endswith('.') else prompt
+    # Combine the paragraphs with a delimiter for processing
+    combined_input = "\n\n".join(paragraphs)
+    input_prompt = combined_input + '.' if not combined_input.endswith('.') else combined_input
+
+    replacements = {}
 
     for question in prompt_questions:
-        params = {'max_length': len(prompt), 'prompts': question + input_prompt + additional_prompt}
+        params = {'max_length': len(combined_input), 'prompts': question + input_prompt + additional_prompt}
         response = requests.get("https://polite-horribly-cub.ngrok-free.app/generate_code", params=custom_urlencode(params))
         print("Request URL:", response.url)  # Debugging
 
@@ -181,9 +235,14 @@ def call(prompt):
             for res in generated_code_list:
                 formatted = (str(res).split("\n\n")[0].replace("\n         ", '').split("\n        ")[0].replace('\r', '').strip())
 
+                # Split the corrected paragraphs and map them back to the original paragraphs
+                corrected_paragraphs = formatted.split("\n\n")
+                for original, corrected in zip(paragraphs, corrected_paragraphs):
+                    replacements[original] = corrected
+
                 # More debugging information
                 print("Formatted Response:", formatted)
-                return formatted
+                return replacements
 
         else:
             print("Failed to retrieve code. Status code:", response.status_code)
@@ -244,7 +303,7 @@ def correct_text_file(file_path):
         corrected_lines = []
         for line in lines:
             if line.strip():
-                corrected_line = call(line.strip())
+                corrected_line = call_batch(line.strip())
                 corrected_lines.append(corrected_line + '\n' if corrected_line else line)
             else:
                 corrected_lines.append('\n')
@@ -265,7 +324,7 @@ if __name__ == "__main__":
     for paragraph in doc.paragraphs:
         if str(paragraph.text).strip() != '':
             target = paragraph.text.strip()
-            answer = call(target)
+            answer = call_batch(target)
             if answer:
                 replace_list[target] = answer
                 print(f'{target} ---> {answer}')
