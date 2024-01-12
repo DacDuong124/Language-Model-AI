@@ -121,9 +121,23 @@ def correct_document_from_url(document_url, user_id):
             else:
                 print("Failed to upload formatted file to Firebase Storage")
 
+        # Delete the original downloaded file and any intermediate files
+        os.remove(downloaded_filename)
+        if file_extension == '.docx':
+            raw_file_path = downloaded_filename.rstrip(file_extension) + "_raw.docx"
+            if os.path.exists(raw_file_path):
+                os.remove(raw_file_path)
+            if os.path.exists(formatted_file_path):
+                os.remove(formatted_file_path)
+
+        # Delete the corrected file
+        if os.path.exists(local_corrected_path):
+            os.remove(local_corrected_path)
+
         return corrected_file_url, formatted_file_url  # Return both URLs
     else:
         print("No corrected file to upload.")
+        os.remove(downloaded_filename)
         return None
     
 def process_document(doc_name):
