@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 // import axios from "axios";
 // import { useNavigate } from 'react-router-dom';
 import { getAuth } from "firebase/auth";
-import { getStorage, ref as storageRef, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
-import { doc, setDoc, getFirestore, deleteDoc } from "firebase/firestore";
+import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
+import { doc, setDoc, getFirestore } from "firebase/firestore";
 import { collection, query, getDocs, where } from "firebase/firestore";
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -42,6 +42,16 @@ function Document() {
   };
 
   const handleFileUpload = async () => {
+    if (!selectedFile) {
+      alert('No file selected');
+      return;
+    }
+
+    if (userRole !== 'user_plus' && documents.length >= 3) {
+      alert('Upload limit reached. Please Upgrade to user_plus for unlimited uploads.');
+      return;
+    }
+
     if (selectedFile && user) {
       const storage = getStorage();
       // Use the user's UID as the userID field
@@ -128,29 +138,6 @@ function Document() {
 
 
 
-  // const deleteFile = async (e, fileName) => {
-  //   e.stopPropagation();
-  //   if (!user) return;
-
-  //   try {
-  //     // Delete from Firebase Storage
-  //     const fileRef = storageRef(getStorage(), `user_files/${user.uid}/${fileName}`);
-  //     await deleteObject(fileRef);
-
-  //     // Delete the document from Firestore
-  //     const firestoreRef = doc(firestore, `users/${user.uid}/documents`, fileName);
-  //     await deleteDoc(firestoreRef);
-
-  //     // Update local state to reflect deletion
-  //     setDocuments(documents.filter(doc => doc.name !== fileName));
-
-  //     alert('File and its record deleted successfully');
-  //   } catch (error) {
-  //     console.error('Error deleting file:', error);
-  //     alert('Error deleting file');
-  //   }
-  // };
-
   const deleteFile = async (e, fileName) => {
     e.stopPropagation();
     if (!user) return;
@@ -202,6 +189,43 @@ function Document() {
 
     setCorrectingDocName(null); // End the correction process
   };
+
+  const [userRole, setUserRole] = useState('');
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const jwtToken = localStorage.getItem('jwtToken');
+      if (!jwtToken) {
+        // Handle the case where there is no token
+        console.log('No JWT Token found');
+        return;
+      }
+
+      try {
+        const response = await fetch('http://localhost:3000/profile', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${jwtToken}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch user data');
+        }
+
+        const data = await response.json();
+        setUserRole(data.role);  // Set the user email
+        console.log("Fetched User Email:", data.role); // Verify the fetched email
+
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+        // Handle error, maybe navigate to login
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
 
 

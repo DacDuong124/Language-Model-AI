@@ -583,3 +583,10 @@ progress::-webkit-progress-value {
   .download-btn:hover {
     background-color: #d0d0d0; 
   }
+
+
+  /* ADMIN INTERFACE */
+/* MANAGE ACCOUNT */
+.adminManageAccountBackground{
+    padding: 30px;
+}

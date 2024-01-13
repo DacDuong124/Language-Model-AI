@@ -232,29 +232,62 @@ const LoginSignUp = () => {
   //   }
   // };
 
+  // const handleLogin = async () => {
+  //   try {
+  //     const auth = getAuth();
+  //     const userCredential = await signInWithEmailAndPassword(auth, email, password);
+
+  //     // Get the user
+  //     const user = userCredential.user;
+
+  //     // Get the ID token
+  //     const token = await user.getIdToken();
+
+  //     // Save the ID token to local storage
+  //     localStorage.setItem('jwtToken', token);
+
+  //     // Check if the custom claim for 'admin' is set to true
+  //     if (token.claims.admin) {
+  //       // Navigate to the admin dashboard
+  //       navigate('/manageUserAccount');
+  //     } else {
+  //       // Navigate to the user home page
+  //       navigate('/userHomePage'); // Ensure this is the correct path for your user home page
+  //     }
+
+  //   } catch (error) {
+  //     setLoginFailed(true);
+  //     console.error('Login Error:', error.message);
+  //     // Handle login failure (e.g., show an error message)
+  //   }
+  // };
   const handleLogin = async () => {
     try {
       const auth = getAuth();
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
-
-      // Get the user
       const user = userCredential.user;
-
-      // Get the ID token
-      const token = await user.getIdToken();
-
-      // Save the ID token to local storage
-      localStorage.setItem('jwtToken', token);
-
-      // Navigate to user home page
-      navigate('/userHomePage');
-
+  
+      // Force refresh the token to ensure it has the latest custom claims
+      const idTokenResult = await user.getIdTokenResult(true);
+  
+      // Save the refreshed ID token to local storage
+      localStorage.setItem('jwtToken', idTokenResult.token);
+  
+      // Check if the custom claim for 'admin' is set to true
+      if (idTokenResult.claims.admin) {
+        // Navigate to the admin dashboard
+        navigate('/manageAccount');
+      } else {
+        // Navigate to the user home page
+        navigate('/userHomePage'); // Ensure this is the correct path for your user home page
+      }
     } catch (error) {
       setLoginFailed(true);
       console.error('Login Error:', error.message);
       // Handle login failure (e.g., show an error message)
     }
   };
+
   // useEffect to close success alerts after 3000 milliseconds (adjust as needed)
   useEffect(() => {
     if (loginFailed) {
