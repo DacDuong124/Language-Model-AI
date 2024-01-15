@@ -15,12 +15,13 @@ from google.cloud import storage
 from functools import wraps
 
 
+
 app = Flask(__name__)
 # help(firebase_admin.auth)
 
 ##AI API backend
 #####################
-CORS(app, origins="http://localhost:3000")
+CORS(app, resources={r"/*": {"origins": ["http://localhost:3000", "https://language-sculptor-ai.vercel.app"]}})
 
 @app.route("/generate_code", methods=["POST"])  # Change method to POST
 def generate_code():
