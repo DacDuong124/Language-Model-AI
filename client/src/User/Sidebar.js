@@ -17,27 +17,48 @@ const Sidebar = () => {
       return;
     }
 
-    fetch('http://localhost:3000/profile', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${jwtToken}`,
-      },
+  //   fetch('http://localhost:3000/profile', {
+  //     method: 'GET',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //       'Authorization': `Bearer ${jwtToken}`,
+  //     },
+  //   })
+  //     .then(response => {
+  //       if (!response.ok) {
+  //         throw new Error('Token expired or invalid');
+  //       }
+  //       return response.json();
+  //     })
+  //     .then(data => {
+  //       setUserData(data);
+  //     })
+  //     .catch(error => {
+  //       console.error('Error fetching user data:', error);
+  //       navigate('/login'); // Redirect to login on error
+  //     });
+  // }, [navigate]); // Dependency array includes navigate
+  fetch('https://languagesculptor.azurewebsites.net/profile', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${jwtToken}`,
+    },
+  })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Token expired or invalid');
+      }
+      return response.json();
     })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Token expired or invalid');
-        }
-        return response.json();
-      })
-      .then(data => {
-        setUserData(data);
-      })
-      .catch(error => {
-        console.error('Error fetching user data:', error);
-        navigate('/login'); // Redirect to login on error
-      });
-  }, [navigate]); // Dependency array includes navigate
+    .then(data => {
+      setUserData(data);
+    })
+    .catch(error => {
+      console.error('Error fetching user data:', error);
+      navigate('/login'); // Redirect to login on error
+    });
+}, [navigate]); // Dependency array includes navigate
 
   //The logout function
   const handleLogout = () => {
