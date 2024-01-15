@@ -21,7 +21,13 @@ app = Flask(__name__)
 
 ##AI API backend
 #####################
-CORS(app, resources={r"/*": {"origins": ["http://localhost:3000", "https://language-sculptor-ai.vercel.app"]}})
+# CORS(app, resources={r"/*": {"origins": ["http://localhost:3000", "https://language-sculptor-ai.vercel.app"]}}, supports_credentials=True)
+
+CORS(app, resources={r"/*": {
+    "origins": ["https://language-sculptor-ai.vercel.app"],
+    "allow_headers": ["Authorization", "Content-Type"],
+    "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+}}, supports_credentials=True)
 
 @app.route("/generate_code", methods=["POST"])  # Change method to POST
 def generate_code():
