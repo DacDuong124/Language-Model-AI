@@ -13,6 +13,7 @@ import firebase_admin
 from firebase_admin import credentials, auth, firestore, initialize_app
 from google.cloud import storage
 from functools import wraps
+import os
 
 
 
@@ -65,21 +66,32 @@ def generate_code():
 
 
 # Login Authentication Backend
-#####################
-# app.config["JWT_SECRET_KEY"] = "please-remember-to-change-me"
-# jwt = JWTManager(app)
-# app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1)
+
 
 FIREBASE_WEB_API_KEY = 'AIzaSyD41gPBqyZpRdKGkvF8vt5NCS-X7nrPZ5c'
 
 
-# app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(seconds=5)
 
 # Register Backend
 
-# Configure Firebase Admin SDK
-cred = credentials.Certificate("language-ai-model-firebase-adminsdk-l4hgq-1c59e87bd8.json")
-firebase_admin.initialize_app(cred)
+# # Configure Firebase Admin SDK
+# cred = credentials.Certificate("language-ai-model-firebase-adminsdk-l4hgq-1c59e87bd8.json")
+# firebase_admin.initialize_app(cred)
+
+
+# Name of the environment variable used in Azure to store the JSON credentials
+env_var_name = 'FIREBASE_CREDENTIALS'
+
+# Check if running in a production environment (like Azure)
+if env_var_name in os.environ:
+    # If running in production, load the credentials from the environment variable
+    cred = credentials.Certificate(json.loads(os.environ[env_var_name]))
+else:
+    # If running locally, load the credentials from the file
+    cred = credentials.Certificate(r"C:\Users\Admin\Desktop\SEMESTERS\Semester 3 2023\Software Architecture and Design\Language-Model-AI\flask-server\language-ai-model-firebase-adminsdk-l4hgq-1c59e87bd8.json")
+
+# Initialize the Firebase app with the credentials
+initialize_app(cred)
 
 db = firestore.client()
 
