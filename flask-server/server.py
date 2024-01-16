@@ -147,22 +147,6 @@ def verify_firebase_token(token):
         print("Detailed error verifying Firebase token:", str(e))
         return None
 
-# @app.route('/login', methods=["POST"])
-# def login():
-#     data = request.json
-#     email = data.get('email')
-#     password = data.get('password')
-
-#     if not email or not password:
-#         return jsonify({"error": "Email and password are required"}), 400
-
-#     try:
-#         # Attempt to sign in the user with the provided credentials
-#         user = auth.get_user_by_email(email)
-#         # You can add additional checks here (e.g., verify password if needed)
-#         return jsonify({"message": "Login successful", "user_id": user.uid}), 200
-#     except Exception as e:
-#         return jsonify({"error": str(e)}), 401
 
 @app.route("/profile", methods=["GET", "PATCH"])
 def profile():
