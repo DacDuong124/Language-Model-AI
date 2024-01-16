@@ -5,8 +5,7 @@ import text_correction
 
 import json
 import datetime
-# from flask_jwt_extended import create_access_token,get_jwt,get_jwt_identity, \
-#                                unset_jwt_cookies, jwt_required, JWTManager
+
                                
 import firebase_admin
 
