@@ -28,7 +28,7 @@ jobs:
           source venv/bin/activate
       
       - name: Install dependencies
-        run: pip install -r flask-server/requirements.txt
+        run: pip install -r requirements.txt
 
       - name: Ensure scikit-learn is not installed
         run: pip uninstall -y scikit-learn
