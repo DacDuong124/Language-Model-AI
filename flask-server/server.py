@@ -79,7 +79,7 @@ FIREBASE_WEB_API_KEY = 'AIzaSyD41gPBqyZpRdKGkvF8vt5NCS-X7nrPZ5c'
 
 
 # Name of the environment variable used in Azure to store the JSON credentials
-env_var_name = 'FIREBASE_CREDENTIALS'
+env_var_name = 'FIREBASE_ADMIN_CREDENTIALS'
 
 # Check if running in a production environment (like Azure)
 if env_var_name in os.environ:
