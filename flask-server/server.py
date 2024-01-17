@@ -80,7 +80,7 @@ FIREBASE_WEB_API_KEY = 'AIzaSyD41gPBqyZpRdKGkvF8vt5NCS-X7nrPZ5c'
 
 
 # Name of the environment variable used in Azure to store the JSON credentials
-env_var_name = 'GOOGLE_APPLICATION_CREDENTIALS_JSON'
+env_var_name = 'GOOGLE_APPLICATION_CREDENTIALS'
 
 # Initialize credentials variable
 cred = None
