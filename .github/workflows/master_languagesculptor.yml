@@ -33,15 +33,17 @@ jobs:
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
 
       - name: Zip artifact for deployment
-        run: zip -r release.zip . -x "*venv/*"
+        run: zip -r release.zip flask-server/*
 
       - name: Upload artifact for deployment jobs
         uses: actions/upload-artifact@v3
         with:
           name: python-app
-          path: |
-            release.zip
-            !venv/
+          path: release.zip
+
+            
+      - name: List contents of the zip file
+        run: unzip -l release.zip
 
   deploy:
     runs-on: ubuntu-latest
