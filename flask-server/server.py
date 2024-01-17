@@ -21,6 +21,7 @@ app = Flask(__name__)
 
 ##AI API backend
 #####################
+#Only comment this line out when running locally
 # CORS(app, resources={r"/*": {"origins": ["http://localhost:3000", "https://language-sculptor-ai.vercel.app"]}}, supports_credentials=True)
 
 CORS(app, resources={r"/*": {
@@ -81,16 +82,27 @@ FIREBASE_WEB_API_KEY = 'AIzaSyD41gPBqyZpRdKGkvF8vt5NCS-X7nrPZ5c'
 # Name of the environment variable used in Azure to store the JSON credentials
 env_var_name = 'FIREBASE_ADMIN_CREDENTIALS'
 
+# Initialize credentials variable
+cred = None
+storage_client = None
 # Check if running in a production environment (like Azure)
 if env_var_name in os.environ:
-    # If running in production, load the credentials from the environment variable
-    cred = credentials.Certificate(json.loads(os.environ[env_var_name]))
+    # Parse the JSON credentials from the environment variable
+    firebase_credentials = json.loads(os.environ[env_var_name])
+    # Use the parsed JSON object to initialize the credentials
+    cred = credentials.Certificate(firebase_credentials)
+    # Initialize the Firebase Admin SDK with the credential object
+    initialize_app(cred)
+    # Explicitly create a Google Cloud Storage client with the same credentials
+    storage_client = storage.Client(credentials=cred)
 else:
-    # If running locally, load the credentials from the file
+    # If running locally, load the credentials from the file and use it for Firebase
     cred = credentials.Certificate(r"C:\Users\Admin\Desktop\SEMESTERS\Semester 3 2023\Software Architecture and Design\Language-Model-AI\flask-server\language-ai-model-firebase-adminsdk-l4hgq-1c59e87bd8.json")
+    # Initialize the Firebase Admin SDK with the credential object
+    initialize_app(cred)
+    # Create a Google Cloud Storage client for local development
+    storage_client = storage.Client()
 
-# Initialize the Firebase app with the credentials
-initialize_app(cred)
 
 db = firestore.client()
 
@@ -237,8 +249,6 @@ def profile():
 #####################
 
 
-# Initialize a storage client
-storage_client = storage.Client()
 # Get the bucket from the storage client
 bucket = storage_client.get_bucket('language-ai-model.appspot.com')
 

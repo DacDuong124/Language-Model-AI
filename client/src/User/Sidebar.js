@@ -38,6 +38,8 @@ const Sidebar = () => {
   //       navigate('/login'); // Redirect to login on error
   //     });
   // }, [navigate]); // Dependency array includes navigate
+
+
   fetch('https://languagesculptor.azurewebsites.net/profile', {
     method: 'GET',
     headers: {
