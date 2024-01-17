@@ -80,7 +80,7 @@ FIREBASE_WEB_API_KEY = 'AIzaSyD41gPBqyZpRdKGkvF8vt5NCS-X7nrPZ5c'
 
 
 # Name of the environment variable used in Azure to store the JSON credentials
-env_var_name = 'GOOGLE_CREDENTIALS_JSON'
+env_var_name = 'GOOGLE_APPLICATION_CREDENTIALS'
 
 # Initialize credentials variable
 cred = None
@@ -94,7 +94,7 @@ if env_var_name in os.environ:
     # Initialize the Firebase Admin SDK with the credential object
     initialize_app(cred)
     # Explicitly create a Google Cloud Storage client with the same credentials
-    storage_client = storage.Client(credentials=cred)
+    storage_client = storage.Client()
 else:
     # If running locally, load the credentials from the file and use it for Firebase
     cred = credentials.Certificate(r"C:\Users\Admin\Desktop\SEMESTERS\Semester 3 2023\Software Architecture and Design\Language-Model-AI\flask-server\language-ai-model-firebase-adminsdk-l4hgq-1c59e87bd8.json")
