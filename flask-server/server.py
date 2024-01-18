@@ -88,20 +88,25 @@ storage_client = None
 # Check if running in a production environment (like Azure)
 if env_var_name in os.environ:
     # Parse the JSON credentials from the environment variable
-    firebase_credentials = json.loads(os.environ[env_var_name])
-    # Use the parsed JSON object to initialize the credentials
-    cred = credentials.Certificate(firebase_credentials)
-    # Initialize the Firebase Admin SDK with the credential object
-    initialize_app(cred)
-    # Explicitly create a Google Cloud Storage client with the same credentials
-    storage_client = storage.Client()
-else:
-    # If running locally, load the credentials from the file and use it for Firebase
-    cred = credentials.Certificate(r"C:\Users\Admin\Desktop\SEMESTERS\Semester 3 2023\Software Architecture and Design\Language-Model-AI\flask-server\language-ai-model-firebase-adminsdk-l4hgq-1c59e87bd8.json")
-    # Initialize the Firebase Admin SDK with the credential object
-    initialize_app(cred)
-    # Create a Google Cloud Storage client for local development
-    storage_client = storage.Client()
+    try:
+        firebase_credentials = json.loads(os.environ[env_var_name])
+        # Use the parsed JSON object to initialize the credentials
+        cred = credentials.Certificate(firebase_credentials)
+        # Initialize the Firebase Admin SDK with the credential object
+        initialize_app(cred)
+        # Explicitly create a Google Cloud Storage client with the same credentials
+        storage_client = storage.Client(credentials=cred)
+    except json.JSONDecodeError as e:
+        print(f"Failed to parse JSON credentials: {e}")
+        
+        
+## If running locally, load the credentials from the file and use it for Firebase       
+# else:
+#     cred = credentials.Certificate(r"C:\Users\Admin\Desktop\SEMESTERS\Semester 3 2023\Software Architecture and Design\Language-Model-AI\flask-server\language-ai-model-firebase-adminsdk-l4hgq-1c59e87bd8.json")
+#     # Initialize the Firebase Admin SDK with the credential object
+#     initialize_app(cred)
+#     # Create a Google Cloud Storage client for local development
+#     storage_client = storage.Client()
 
 
 db = firestore.client()
@@ -498,6 +503,7 @@ def get_user_profile(uid):
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
+# Comment out this part if run locally !
 # if __name__ == "__main__":
 #     app.run(debug=True)
 
