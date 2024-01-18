@@ -66,4 +66,4 @@ jobs:
         with:
           app-name: 'LanguageSculptor'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_93B80B36A2C64DF59775719885752334 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_0C645AD707894B8783F97CC4D0C99A09 }}
