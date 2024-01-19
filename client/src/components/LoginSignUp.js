@@ -58,7 +58,9 @@ const LoginSignUp = () => {
     // });
     ////// STACK OVERFLOW BABY (https://stackoverflow.com/questions/50130902/question-mark-in-url-when-make-login)
     try {
-      const response = await axios.post("/register", {
+      //local run only
+      //   const response = await axios.post('http://localhost:3000/register', {
+      const response = await axios.post('http://ec2-18-143-187-232.ap-southeast-1.compute.amazonaws.com:3001/register', {
         email,
         password,
       });
@@ -93,6 +95,8 @@ const LoginSignUp = () => {
 
   }
   
+
+
 
   const handleGoogleSignIn = async () => {
     try {
@@ -168,7 +172,7 @@ const LoginSignUp = () => {
       localStorage.setItem("jwtToken", token);
 
       // Navigate to user home page
-      navigate("/userHomePage");
+      navigate('/document');
     } catch (error) {
       // Handle any errors here
       console.error("Error during Microsoft sign-in:", error);

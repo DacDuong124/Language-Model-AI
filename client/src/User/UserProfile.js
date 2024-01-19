@@ -38,21 +38,16 @@ const UserProfile = () => {
       return;
     }
 
-    // fetch("http://localhost:3000/profile", {
-    //   method: "GET",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     Authorization: `Bearer ${jwtToken}`,
-    //   },
-    // });
-    axios
-      .get("/profile", {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${jwtToken}`,
-        },
-      })
-      .then((response) => {
+    //local run only
+    // fetch('http://localhost:3000/profile', {
+    fetch('http://ec2-18-143-187-232.ap-southeast-1.compute.amazonaws.com:3001/profile', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${jwtToken}`,
+      },
+    })
+      .then(response => {
         if (!response.ok) {
           throw new Error("Token expired or invalid");
         }
@@ -81,24 +76,15 @@ const UserProfile = () => {
       return;
     }
 
-    // fetch("http://localhost:3000/profile", {
-    //   method: "PATCH",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     Authorization: `Bearer ${jwtToken}`,
-    //   },
-    //   body: JSON.stringify({ firstName, lastName }),
-    // });
-
-    axios
-      .patch("/profile", {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${jwtToken}`,
-        },
-        body: JSON.stringify({ firstName, lastName }),
-      })
-      .then((response) => {
+    fetch('http://ec2-18-143-187-232.ap-southeast-1.compute.amazonaws.com:3001/profile', {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${jwtToken}`,
+      },
+      body: JSON.stringify({ firstName, lastName }),
+    })
+      .then(response => {
         if (!response.ok) {
           throw new Error("Failed to update profile");
         }
@@ -187,24 +173,14 @@ const UserProfile = () => {
       return;
     }
 
-    if (
-      window.confirm(
-        "Are you sure you want to delete your account? This action WILL NOT be undone."
-      )
-    ) {
-      // fetch("http://localhost:3000/delete_account", {
-      //   method: "DELETE",
-      //   headers: {
-      //     Authorization: `Bearer ${jwtToken}`,
-      //   },
-      // })
-      axios
-        .delete("/delete_account", {
-          headers: {
-            Authorization: `Bearer ${jwtToken}`,
-          },
-        })
-        .then((response) => {
+    if (window.confirm('Are you sure you want to delete your account? This action WILL NOT be undone.')) {
+      fetch('http://ec2-18-143-187-232.ap-southeast-1.compute.amazonaws.com:3001/delete_account', {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${jwtToken}`,
+        },
+      })
+        .then(response => {
           if (!response.ok) {
             throw new Error("Failed to delete account");
           }
