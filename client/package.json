@@ -30,13 +30,15 @@
     "react-table": "^7.8.0",
     "react-video-js-player": "^1.1.1",
     "sass": "^1.69.5",
+    "serve": "^14.2.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "prod": "npm run build && serve -s build"
   },
   "eslintConfig": {
     "extends": [

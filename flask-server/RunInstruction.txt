@@ -6,4 +6,11 @@ $Env:GOOGLE_APPLICATION_CREDENTIALS="path\to\your\service-account-file.json"
 In this case, the file is C:\Users\Admin\Desktop\SEMESTERS\Semester 3 2023\Software Architecture and Design\Language-Model-AI\flask-server\language-ai-model-firebase-adminsdk-l4hgq-1c59e87bd8.json
 
 Full line:
-$Env:GOOGLE_APPLICATION_CREDENTIALS="C:\Users\Admin\Desktop\SEMESTERS\Semester 3 2023\Software Architecture and Design\Language-Model-AI\flask-server\language-ai-model-firebase-adminsdk-l4hgq-1c59e87bd8.json"
+$Env:GOOGLE_APPLICATION_CREDENTIALS="/Users/brian/CLOUD/CodePlayground/Clones/Language-Model-AI/flask-server/language-ai-model-firebase-adminsdk-l4hgq-1c59e87bd8.json"
+
+On EC2:
+pwd to get path to json file
+export GOOGLE_APPLICATION_CREDENTIALS="<path>/language-ai-model-firebase-adminsdk-l4hgq-1c59e87bd8.json"
+
+Frontend:
+For production: npm run prod
