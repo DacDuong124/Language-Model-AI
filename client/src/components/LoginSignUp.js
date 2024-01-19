@@ -168,7 +168,7 @@ const LoginSignUp = () => {
       localStorage.setItem("jwtToken", token);
 
       // Navigate to user home page
-      navigate('/document');
+      navigate("/userHomePage");
     } catch (error) {
       // Handle any errors here
       console.error("Error during Microsoft sign-in:", error);

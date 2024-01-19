@@ -47,6 +47,51 @@ const Sidebar = () => {
     //     });
     // }, [navigate]); // Dependency array includes navigate
 
+  // local run only
+  //   fetch('http://localhost:3000/profile', {
+//   fetch('http://ec2-18-143-187-232.ap-southeast-1.compute.amazonaws.com:3001/profile', {
+//     method: 'GET',
+//     headers: {
+//       'Content-Type': 'application/json',
+//       'Authorization': `Bearer ${jwtToken}`,
+//     },
+//   })
+//     .then(response => {
+//       if (!response.ok) {
+//         throw new Error('Token expired or invalid');
+//       }
+//       return response.json();
+//     })
+//     .then(data => {
+//       setUserData(data);
+//     })
+//     .catch(error => {
+//       console.error('Error fetching user data:', error);
+//       navigate('/login'); // Redirect to login on error
+//     });
+// }, [navigate]); // Dependency array includes navigate
+    //   fetch('http://localhost:3000/profile', {
+    //     method: 'GET',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //       'Authorization': `Bearer ${jwtToken}`,
+    //     },
+    //   })
+    //     .then(response => {
+    //       if (!response.ok) {
+    //         throw new Error('Token expired or invalid');
+    //       }
+    //       return response.json();
+    //     })
+    //     .then(data => {
+    //       setUserData(data);
+    //     })
+    //     .catch(error => {
+    //       console.error('Error fetching user data:', error);
+    //       navigate('/login'); // Redirect to login on error
+    //     });
+    // }, [navigate]); // Dependency array includes navigate
+
     // fetch('https://languagesculptor.azurewebsites.net/profile', {
     // fetch('http://ec2-18-143-187-232.ap-southeast-1.compute.amazonaws.com:3001/profile', {
     //   method: 'GET',

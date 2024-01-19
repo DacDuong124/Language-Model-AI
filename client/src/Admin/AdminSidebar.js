@@ -27,6 +27,9 @@ const AdminSidebar = () => {
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 47edfc5 (fix: resolve conflicts)
     // // fetch('http://localhost:3000/profile', {
     //   method: 'GET',
     //   headers: {
@@ -42,6 +45,7 @@ const AdminSidebar = () => {
         },
       })
       .then((response) => {
+<<<<<<< HEAD
 =======
   //   fetch('http://localhost:3000/profile', {
 
@@ -55,6 +59,8 @@ const AdminSidebar = () => {
     })
       .then(response => {
 >>>>>>> d229e8a (Fixing the frontend backend link to use AWS link instead)
+=======
+>>>>>>> 47edfc5 (fix: resolve conflicts)
         if (!response.ok) {
           throw new Error("Token expired or invalid");
         }
