@@ -14,3 +14,11 @@ export GOOGLE_APPLICATION_CREDENTIALS="<path>/language-ai-model-firebase-adminsd
 
 Frontend:
 For production: npm run prod
+
+Port already in use error:
+lsof -i tcp:3001
+kill -9 <PID>
+
+Run server script:
+./run.sh
+if bash error, run: chmod +x ./run.sh
