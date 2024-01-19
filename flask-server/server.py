@@ -22,13 +22,13 @@ app = Flask(__name__)
 ##AI API backend
 #####################
 #Only comment this line out when running locally
-# CORS(app, resources={r"/*": {"origins": ["http://localhost:3000", "https://language-sculptor-ai.vercel.app"]}}, supports_credentials=True)
+CORS(app, resources={r"/*": {"origins": ["http://localhost:3000", "https://language-sculptor-ai.vercel.app"]}}, supports_credentials=True)
 
-CORS(app, resources={r"/*": {
-    "origins": ["https://language-sculptor-ai.vercel.app"],
-    "allow_headers": ["Authorization", "Content-Type"],
-    "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
-}}, supports_credentials=True)
+# CORS(app, resources={r"/*": {
+#     "origins": ["https://language-sculptor-ai.vercel.app"],
+#     "allow_headers": ["Authorization", "Content-Type"],
+#     "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+# }}, supports_credentials=True)
 
 @app.route("/generate_code", methods=["POST"])  # Change method to POST
 def generate_code():
@@ -74,39 +74,12 @@ FIREBASE_WEB_API_KEY = 'AIzaSyD41gPBqyZpRdKGkvF8vt5NCS-X7nrPZ5c'
 
 # Register Backend
 
-# # Configure Firebase Admin SDK
-# cred = credentials.Certificate("language-ai-model-firebase-adminsdk-l4hgq-1c59e87bd8.json")
-# firebase_admin.initialize_app(cred)
+# Configure Firebase Admin SDK
+cred = credentials.Certificate("language-ai-model-firebase-adminsdk-l4hgq-1c59e87bd8.json")
+firebase_admin.initialize_app(cred)
 
 
-# Name of the environment variable used in Azure to store the JSON credentials
-env_var_name = 'GOOGLE_APPLICATION_CREDENTIALS_JSON'
 
-# Initialize credentials variable
-cred = None
-storage_client = None
-# Check if running in a production environment (like Azure)
-if env_var_name in os.environ:
-    # Parse the JSON credentials from the environment variable
-    try:
-        firebase_credentials = json.loads(os.environ[env_var_name])
-        # Use the parsed JSON object to initialize the credentials
-        cred = credentials.Certificate(firebase_credentials)
-        # Initialize the Firebase Admin SDK with the credential object
-        initialize_app(cred)
-        # Explicitly create a Google Cloud Storage client with the same credentials
-        storage_client = storage.Client(credentials=cred)
-    except json.JSONDecodeError as e:
-        print(f"Failed to parse JSON credentials: {e}")
-        
-        
-## If running locally, load the credentials from the file and use it for Firebase       
-# else:
-#     cred = credentials.Certificate(r"C:\Users\Admin\Desktop\SEMESTERS\Semester 3 2023\Software Architecture and Design\Language-Model-AI\flask-server\language-ai-model-firebase-adminsdk-l4hgq-1c59e87bd8.json")
-#     # Initialize the Firebase Admin SDK with the credential object
-#     initialize_app(cred)
-#     # Create a Google Cloud Storage client for local development
-#     storage_client = storage.Client()
 
 
 db = firestore.client()
@@ -255,6 +228,7 @@ def profile():
 
 
 # Get the bucket from the storage client
+storage_client = storage.Client()
 bucket = storage_client.get_bucket('language-ai-model.appspot.com')
 
 @app.route('/delete_account', methods=['DELETE'])
@@ -504,7 +478,7 @@ def get_user_profile(uid):
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
 # Comment out this part if run locally !
-# if __name__ == "__main__":
-#     app.run(debug=True)
+if __name__ == "__main__":
+    app.run(debug=True)
 
 
