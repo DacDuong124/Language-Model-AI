@@ -37,7 +37,9 @@ const UserProfile = () => {
       return;
     }
 
-    fetch('http://localhost:3000/profile', {
+    //local run only
+    // fetch('http://localhost:3000/profile', {
+    fetch('http://ec2-18-143-187-232.ap-southeast-1.compute.amazonaws.com:3001/profile', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -74,7 +76,7 @@ const UserProfile = () => {
       return;
     }
 
-    fetch('http://localhost:3000/profile', {
+    fetch('http://ec2-18-143-187-232.ap-southeast-1.compute.amazonaws.com:3001/profile', {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -169,7 +171,7 @@ const UserProfile = () => {
     }
 
     if (window.confirm('Are you sure you want to delete your account? This action WILL NOT be undone.')) {
-      fetch('http://localhost:3000/delete_account', {
+      fetch('http://ec2-18-143-187-232.ap-southeast-1.compute.amazonaws.com:3001/delete_account', {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${jwtToken}`,

@@ -14,7 +14,10 @@ function AIPrompt() {
         try {
             console.log('Requesting code generation with prompt:', inputPrompt.input);
 
-            const response = await fetch("http://localhost:3000/generate_code", {
+            //local run only
+            // const response = await fetch("http://localhost:3000/generate_code", {
+
+            const response = await fetch("http://ec2-18-143-187-232.ap-southeast-1.compute.amazonaws.com:3001/generate_code", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -44,7 +47,7 @@ function AIPrompt() {
     };
 
     return (
-        <div>
+        <div style={{ paddingLeft: '90px', paddingTop: '20px' }}>
 
             <label>
                 <h1>Enter Prompt:</h1>
