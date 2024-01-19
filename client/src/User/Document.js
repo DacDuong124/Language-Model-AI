@@ -166,7 +166,10 @@ function Document() {
       const auth = getAuth();
       const token = await auth.currentUser.getIdToken(); // Retrieve Firebase token
 
-      const response = await fetch('http://localhost:3000/correct_document', {
+      //Local run only
+      // const response = await fetch('http://localhost:3000/correct_document', {
+
+      const response = await fetch('http://ec2-18-143-187-232.ap-southeast-1.compute.amazonaws.com:3001/correct_document', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -202,7 +205,10 @@ function Document() {
       }
 
       try {
-        const response = await fetch('http://localhost:3000/profile', {
+        //local run only
+        // const response = await fetch('http://localhost:3000/profile', {
+
+        const response = await fetch('http://ec2-18-143-187-232.ap-southeast-1.compute.amazonaws.com:3001/profile', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

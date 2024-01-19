@@ -44,7 +44,10 @@ const Subscription = () => {
       }
 
       try {
-        const response = await fetch('http://localhost:3000/profile', {
+        //local run only
+        // const response = await fetch('http://localhost:3000/profile', {
+
+        const response = await fetch('http://ec2-18-143-187-232.ap-southeast-1.compute.amazonaws.com:3001/profile', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -77,7 +80,9 @@ const Subscription = () => {
     console.log("Sending Payment ID to backend:", paymentID, "User Email:", userEmail);
 
     try {
-      const response = await fetch('/api/verify-payment', {
+      // const response = await fetch('/api/verify-payment', {
+
+      const response = await fetch('http://ec2-18-143-187-232.ap-southeast-1.compute.amazonaws.com:3001/api/verify-payment', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -114,7 +119,7 @@ const Subscription = () => {
 
 
     <div>
-      <h1>Subscription</h1>
+      <h1 style={{ paddingLeft: '105px', paddingTop: '20px' }}>Subscription</h1>
 
       <div style={{ display: 'flex', justifyContent: 'center', padding: '20px' }}>
         {/* Free Plan */}

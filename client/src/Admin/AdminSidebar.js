@@ -26,6 +26,7 @@ const AdminSidebar = () => {
       return;
     }
 
+<<<<<<< HEAD
     // // fetch('http://localhost:3000/profile', {
     //   method: 'GET',
     //   headers: {
@@ -41,6 +42,19 @@ const AdminSidebar = () => {
         },
       })
       .then((response) => {
+=======
+  //   fetch('http://localhost:3000/profile', {
+
+
+    fetch('http://ec2-18-143-187-232.ap-southeast-1.compute.amazonaws.com:3001/profile', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${jwtToken}`,
+      },
+    })
+      .then(response => {
+>>>>>>> d229e8a (Fixing the frontend backend link to use AWS link instead)
         if (!response.ok) {
           throw new Error("Token expired or invalid");
         }

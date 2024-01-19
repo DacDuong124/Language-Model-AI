@@ -13,7 +13,6 @@ import LoginSignUp from './components/LoginSignUp'
 
 //USER
 import Document from './User/Document'
-import UserHomePage from './User/UserHomePage';
 import Sidebar from './User/Sidebar';
 import Trash from './User/Trash';
 import UserProfile from './User/UserProfile';
@@ -44,7 +43,6 @@ function App() {
 
         {/* USER ROLE */}
         <Route path='/' element={<Sidebar />}>
-          <Route path='/userHomePage' element={<UserHomePage />}></Route>
           <Route path='/viewDocument' element={<ViewDocument />}></Route>
           <Route path='/document' element={<Document />}></Route>
 
